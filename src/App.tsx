@@ -18,14 +18,18 @@ let rgb = [2, 5, 0];
 const MAX_X = 32;
 const MAX_Y = 32;
 let socket: WebSocket | null = null;
+let reconnect_counter = 0;
 
 function App() {
 
   const [isConnected, setIsConnected] = useState(false);
+  const [url, setUrl] = useState('ws://10.200.0.122/paint');
 
   useEffect(() => {
     //const url = `ws://10.200.0.123/paint`; // Galactic
-    const url = `ws://10.200.0.122/paint`; // Cosmic
+    // const url = `ws://10.200.0.122/paint`; // Cosmic 1
+    // const url = `ws://10.200.0.125/paint`; // Cosmic 2
+    //const url = `ws://10.200.0.126/paint`; // Cosmic 3
 
     if (isConnected) {
       socket = new WebSocket(url);
@@ -150,6 +154,7 @@ function App() {
       
       socket.onopen = () => {
         console.log('onopen', new Date());
+        console.log(`Connected to ${url}`);
         
         //clear();
 
@@ -182,7 +187,7 @@ function App() {
         clearInterval(interval);
       }
     };
-  }, [isConnected]);
+  }, [isConnected, url]);
 
   const onClickConnect = () => {
     setIsConnected(true);
@@ -194,8 +199,20 @@ function App() {
   
 
   useEffect(() => {
-
-  }, []);
+    let timer: NodeJS.Timeout | null = null;
+    if (!isConnected && reconnect_counter < 100) {
+      reconnect_counter = reconnect_counter + 1;
+      console.log('reconnect_counter is ', reconnect_counter);
+      timer = setTimeout(() => {
+        setIsConnected(true);
+      }, 2000);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [isConnected]);
 
   const [emoji2, setEmoji] = useState('🚀');
 
@@ -211,7 +228,7 @@ function App() {
       const dataArray = imageData.data
       const rgbArray: number[][] = []
       for (var i = 0; i < dataArray.length; i+=4) {
-          rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2]])
+          rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2], dataArray[i+3]])
       }
   
       //console.log('imageData', imageData);
@@ -241,7 +258,7 @@ function App() {
         // socket.send(JSON.stringify(rgbArray));
 
         // test sending full imagedata
-        //console.log('imagedata length', new Uint8Array(dataArray).length)
+        console.log('imagedata length', new Uint8Array(dataArray).length)
         socket.send('imagedata');
         socket.send(new Uint8Array(dataArray));
 
@@ -283,23 +300,40 @@ function App() {
     send_emoji_2(e.emoji);
   };
 
+  const onChangeUnicorn = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log('e', e.target.value);
+    setUrl(`ws://${e.target.value}/paint`)
+  };
+
   return (
     <div className="App">
-      Unicorn Paint React{' '}
+      Unicorn Paint React{' '}<br />
+      <select onChange={onChangeUnicorn}>
+        <option value="10.200.0.123">Galactic 10.200.0.123</option>
+        <option value="10.200.0.122" selected>Cosmic 1 10.200.0.122</option>
+        <option value="10.200.0.125">Cosmic 2 10.200.0.125</option>
+        <option value="10.200.0.126">Cosmic 3 10.200.0.126</option>
+      </select>
+      <br />
       {!isConnected && <button style={{ backgroundColor: 'green', color: 'white' }} disabled={isConnected} onClick={onClickConnect}>Connect</button>}
       {isConnected && <button style={{ backgroundColor: 'darkred', color: 'white' }} disabled={!isConnected} onClick={onClickDisconnect}>Disconnect</button>}
       <div>
-        Status: {isConnected ? <span style={{ color: 'green'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
+        Status: {isConnected ? <span style={{ color: 'lime'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
       </div>
 
-      <div style={{ width: 350, marginLeft: 'auto', marginRight: 'auto' }}>
+      <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
         {/* <input
           type="text"
           //onChange={emojiChanged}
           value={emoji}
         /> */}
         {/* <button onClick={onSendEmoji}>send</button> */}
-        <EmojiPicker theme={Theme.DARK} onEmojiClick={onEmojiClick} />
+        <EmojiPicker
+          theme={Theme.DARK}
+          onEmojiClick={onEmojiClick}
+          width="100%"
+          height="80vh"
+        />
 
       </div>
       <div>
