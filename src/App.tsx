@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
+import Preview from './widgets/Preview';
+import { UnicornType } from './types/paint';
 
 const randomInt = (min: number, max: number) => { 
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -20,10 +22,53 @@ const MAX_Y = 32;
 let socket: WebSocket | null = null;
 let reconnect_counter = 0;
 
+const unicornTypes = {
+  cosmic: {
+    width: 32,
+    height: 32,
+  },
+  galactic: {
+    width: 32,
+    height: 32,
+  },
+};
+
+const unicornConfigs: UnicornType[] = [
+  {
+    name: 'Galactic',
+    ip: '10.200.0.123',
+    type: 'galactic',
+    dataUrl: undefined,
+  },
+  {
+    name: 'Cosmic 1',
+    ip: '10.200.0.122',
+    type: 'cosmic',
+    dataUrl: undefined,
+  },
+  {
+    name: 'Cosmic 2',
+    ip: '10.200.0.125',
+    type: 'cosmic',
+    dataUrl: undefined,
+  },
+  {
+    name: 'Cosmic 3',
+    ip: '10.200.0.126',
+    type: 'cosmic',
+    dataUrl: undefined,
+  },
+];
+
+const defaultIndex = 3;
+const defaultUnicorn = unicornConfigs[defaultIndex];
+
 function App() {
 
   const [isConnected, setIsConnected] = useState(false);
-  const [url, setUrl] = useState('ws://10.200.0.122/paint');
+  const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
+  const [selectedUnicorn, setSelectedUnicorn] = useState(defaultUnicorn);
+  const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`);
 
   useEffect(() => {
     //const url = `ws://10.200.0.123/paint`; // Galactic
@@ -35,113 +80,113 @@ function App() {
       socket = new WebSocket(url);
     }
 
-    const isOpen = (ws: WebSocket) => { return ws.readyState === ws.OPEN }
+    // const isOpen = (ws: WebSocket) => { return ws.readyState === ws.OPEN }
     
-    const clear = () => {
-      if (socket) {
-        socket.send('clear');
-        socket.send('show');
-      }
-    };
+    // const clear = () => {
+    //   if (socket) {
+    //     socket.send('clear');
+    //     socket.send('show');
+    //   }
+    // };
 
     rgb = randomRgb();
 
-    const update_pixels = () => {
-      //console.log('update_pixels');
-      if (socket) {
-        //console.log(`setting ${x},${y} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
-        socket.send(new Uint8Array([x, y, rgb[0], rgb[1], rgb[2]]));
-        socket.send('show');
+    // const update_pixels = () => {
+    //   //console.log('update_pixels');
+    //   if (socket) {
+    //     //console.log(`setting ${x},${y} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
+    //     socket.send(new Uint8Array([x, y, rgb[0], rgb[1], rgb[2]]));
+    //     socket.send('show');
         
-        // If we are on the last dot, increment y
-        if (x === MAX_X - 1) {
+    //     // If we are on the last dot, increment y
+    //     if (x === MAX_X - 1) {
           
-          rgb = randomRgb();
-          if (y >= MAX_Y - 1) {
-            y = 0;
-          } else {
-            y = y + 1;
-          }
-        }
+    //       rgb = randomRgb();
+    //       if (y >= MAX_Y - 1) {
+    //         y = 0;
+    //       } else {
+    //         y = y + 1;
+    //       }
+    //     }
 
-        if (x >= MAX_X - 1) {
-          x = 0;
-        } else {
-          x = x + 1;
-        }
-      }
-    };
+    //     if (x >= MAX_X - 1) {
+    //       x = 0;
+    //     } else {
+    //       x = x + 1;
+    //     }
+    //   }
+    // };
 
-    const progress_bar = () => {
-      // for(let i=0;i<MAX_X;i++) {
-      //   for(let i=0;i<MAX_X;i++) {
-      //   }
-      // }
+    // const progress_bar = () => {
+    //   // for(let i=0;i<MAX_X;i++) {
+    //   //   for(let i=0;i<MAX_X;i++) {
+    //   //   }
+    //   // }
 
-      if (socket) {
-        //console.log(`setting ${x},${y} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
-        for (let i=0;i<MAX_Y-1;i++) {
-          console.log(`setting ${x},${i} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
-          socket.send(new Uint8Array([x, i, rgb[0], rgb[1], rgb[2]]));
-        }
-        //socket.send(new Uint8Array([x, y, rgb[0], rgb[1], rgb[2]]));
-        socket.send('show');
+    //   if (socket) {
+    //     //console.log(`setting ${x},${y} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
+    //     for (let i=0;i<MAX_Y-1;i++) {
+    //       console.log(`setting ${x},${i} to ${rgb[0]},${rgb[1]},${rgb[2]}`);
+    //       socket.send(new Uint8Array([x, i, rgb[0], rgb[1], rgb[2]]));
+    //     }
+    //     //socket.send(new Uint8Array([x, y, rgb[0], rgb[1], rgb[2]]));
+    //     socket.send('show');
 
-        // If we are on the last dot, increment y
-        // if (x === MAX_X - 1) {
-        //   rgb = randomRgb();
-        //   if (y >= MAX_Y - 1) {
-        //     y = 0;
-        //   } else {
-        //     y = y + 1;
-        //   }
-        // }
+    //     // If we are on the last dot, increment y
+    //     // if (x === MAX_X - 1) {
+    //     //   rgb = randomRgb();
+    //     //   if (y >= MAX_Y - 1) {
+    //     //     y = 0;
+    //     //   } else {
+    //     //     y = y + 1;
+    //     //   }
+    //     // }
 
-        if (x >= MAX_X - 1) {
-          x = 0;
-          rgb = randomRgb();
-        } else {
-          x = x + 1;
-        }
-      }
+    //     if (x >= MAX_X - 1) {
+    //       x = 0;
+    //       rgb = randomRgb();
+    //     } else {
+    //       x = x + 1;
+    //     }
+    //   }
 
-    };
+    // };
 
-    const send_emoji = () => {
-      const c = document.querySelector('#canv') as HTMLCanvasElement;
-      const ctx = c.getContext('2d');
-      if (ctx) {
-        ctx.font = '32px monospace';
-        ctx.fillText('🚀', 32, 32);
-        const imageData = ctx.getImageData(32, 4, 32, 32);
+    // const send_emoji = () => {
+    //   const c = document.querySelector('#canv') as HTMLCanvasElement;
+    //   const ctx = c.getContext('2d');
+    //   if (ctx) {
+    //     ctx.font = '32px monospace';
+    //     ctx.fillText('🚀', 32, 32);
+    //     const imageData = ctx.getImageData(32, 4, 32, 32);
     
-        const dataArray = imageData.data
-        const rgbArray = []
-        for (var i = 0; i < dataArray.length; i+=4) {
-            rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2]])
-        }
+    //     const dataArray = imageData.data
+    //     const rgbArray = []
+    //     for (var i = 0; i < dataArray.length; i+=4) {
+    //         rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2]])
+    //     }
     
-        console.log('imageData', imageData);
-        console.log('rgbArray', rgbArray);
+    //     console.log('imageData', imageData);
+    //     console.log('rgbArray', rgbArray);
 
-        for(let i=0;i<MAX_X;i++) {
-          for(let j=0;j<MAX_Y;j++) {
-            const index = j * 32 + i;
-            console.log('sending', [i, j, rgbArray[index][0], rgbArray[index][1], rgbArray[index][2]]);
-            socket?.send(new Uint8Array([i, j, rgbArray[index][0], rgbArray[index][1], rgbArray[index][2]]));
-          }
-        }
-        if (socket) {
+    //     for(let i=0;i<MAX_X;i++) {
+    //       for(let j=0;j<MAX_Y;j++) {
+    //         const index = j * 32 + i;
+    //         console.log('sending', [i, j, rgbArray[index][0], rgbArray[index][1], rgbArray[index][2]]);
+    //         socket?.send(new Uint8Array([i, j, rgbArray[index][0], rgbArray[index][1], rgbArray[index][2]]));
+    //       }
+    //     }
+    //     if (socket) {
 
-          socket?.send('show');
-        } else {
-          console.log('no socket');
-        }
+    //       socket?.send('show');
+    //     } else {
+    //       console.log('no socket');
+    //     }
 
-      } else {
-        console.log('no ctx');
-      }
-    };
+    //   } else {
+    //     console.log('no ctx');
+    //   }
+    // };
 
     // Connection opened
     let interval: NodeJS.Timer;
@@ -214,7 +259,7 @@ function App() {
     };
   }, [isConnected]);
 
-  const [emoji2, setEmoji] = useState('🚀');
+  // const [emoji2, setEmoji] = useState('🚀');
 
   const send_emoji_2 = (emoji: string) => {
     const c = document.querySelector('#canv') as HTMLCanvasElement;
@@ -222,8 +267,13 @@ function App() {
     if (ctx) {
       ctx.font = '32px monospace';
       ctx.clearRect(0, 0, 128, 128);
-      ctx.fillText(emoji, 32, 32);
-      const imageData = ctx.getImageData(32, 4, 32, 32);
+      const scooch = 4;
+      ctx.fillText(emoji, 0, 32 - scooch);
+      const imageData = ctx.getImageData(0, 4, 32, 32);
+
+      // get data url
+      const dataUrl = c.toDataURL();
+      unicornConfigs[selectedIndex].dataUrl = dataUrl;
   
       const dataArray = imageData.data
       const rgbArray: number[][] = []
@@ -305,20 +355,41 @@ function App() {
     setUrl(`ws://${e.target.value}/paint`)
   };
 
+  const options = unicornConfigs.map((u, i) => {
+    return <option selected={u.ip === defaultUnicorn.ip} value={u.ip}>{u.name} {u.ip}</option>;
+  });
+
+  const onClickUnicornPreview = () => {
+
+  };
+
+  const previewLoop = unicornConfigs.map((u, i) => {
+    return <Preview config={u} onClick={() => setSelectedIndex(i)} />;
+  });
+
   return (
     <div className="App">
       Unicorn Paint React{' '}<br />
       <select onChange={onChangeUnicorn}>
-        <option value="10.200.0.123">Galactic 10.200.0.123</option>
+        {/* <option value="10.200.0.123">Galactic 10.200.0.123</option>
         <option value="10.200.0.122" selected>Cosmic 1 10.200.0.122</option>
         <option value="10.200.0.125">Cosmic 2 10.200.0.125</option>
-        <option value="10.200.0.126">Cosmic 3 10.200.0.126</option>
+        <option value="10.200.0.126">Cosmic 3 10.200.0.126</option> */}
+        {options}
       </select>
       <br />
       {!isConnected && <button style={{ backgroundColor: 'green', color: 'white' }} disabled={isConnected} onClick={onClickConnect}>Connect</button>}
       {isConnected && <button style={{ backgroundColor: 'darkred', color: 'white' }} disabled={!isConnected} onClick={onClickDisconnect}>Disconnect</button>}
       <div>
         Status: {isConnected ? <span style={{ color: 'lime'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
+      </div>
+
+      <div>
+        {/* <Preview name="Cosmic 1" />
+        <Preview name="Cosmic 2" />
+        <Preview name="Cosmic 3" />
+        <Preview name="Cosmic 4" /> */}
+        {previewLoop}
       </div>
 
       <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
@@ -337,7 +408,7 @@ function App() {
 
       </div>
       <div>
-        Canvas: <canvas id="canv" width="128" height="128" style={{ border: '1px solid orange' }}></canvas>
+        Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
       </div>
     </div>
   );

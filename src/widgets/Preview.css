@@ -1,0 +1,18 @@
+.Preview {
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  border: 1px solid #ccc;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 10px;
+  position: relative;
+}
+.Preview img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100px;
+  width: 100px;
+  
+}
