@@ -34,12 +34,12 @@ const unicornTypes = {
 };
 
 const unicornConfigs: UnicornType[] = [
-  {
-    name: 'Galactic',
-    ip: '10.200.0.123',
-    type: 'galactic',
-    dataUrl: undefined,
-  },
+  // {
+  //   name: 'Galactic',
+  //   ip: '10.200.0.123',
+  //   type: 'galactic',
+  //   dataUrl: undefined,
+  // },
   {
     name: 'Cosmic 1',
     ip: '10.200.0.122',
@@ -60,7 +60,7 @@ const unicornConfigs: UnicornType[] = [
   },
 ];
 
-const defaultIndex = 3;
+const defaultIndex = 0;
 const defaultUnicorn = unicornConfigs[defaultIndex];
 
 function App() {
@@ -255,23 +255,46 @@ function App() {
   // probably want to connect, send data, disconnect instead of staying connected to the websocket
   // all the time
   // or probably get rid of websocket altogether
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (!isConnectedDesired && reconnect_counter < 100) {
-      reconnect_counter = reconnect_counter + 1;
-      console.log('reconnect_counter is ', reconnect_counter);
-      timer = setTimeout(() => {
-        setIsConnectedDesired(true);
-      }, 2000);
-    }
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, [isConnectedDesired]);
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout | null = null;
+  //   if (!isConnectedDesired && reconnect_counter < 100) {
+  //     reconnect_counter = reconnect_counter + 1;
+  //     console.log('reconnect_counter is ', reconnect_counter);
+  //     timer = setTimeout(() => {
+  //       setIsConnectedDesired(true);
+  //     }, 2000);
+  //   }
+  //   return () => {
+  //     if (timer) {
+  //       clearTimeout(timer);
+  //     }
+  //   };
+  // }, [isConnectedDesired]);
 
   // const [emoji2, setEmoji] = useState('🚀');
+
+  const doEmojiToData = (emoji: string) => {
+    const c = document.querySelector('#canv') as HTMLCanvasElement;
+    const ctx = c.getContext('2d');
+    if (ctx) {
+      ctx.font = '32px monospace';
+      ctx.clearRect(0, 0, 128, 128);
+      const scooch = 4;
+      ctx.fillText(emoji, 0, 32 - scooch);
+      const imageData = ctx.getImageData(0, 0, 32, 32);
+
+      // get data url from canvas and store it in the unicornConfig (for the Preview display)
+      //const dataUrl = c.toDataURL();
+      //unicornConfigs[selectedIndex].dataUrl = dataUrl;
+      //setTriggerRedraw(Date.now());
+      //const dataArray = imageData.data
+
+      return {
+        data: imageData.data,
+        dataUrl: c.toDataURL(),
+      };
+    }
+  };
 
   const send_emoji_2 = (emoji: string) => {
     const c = document.querySelector('#canv') as HTMLCanvasElement;
@@ -289,10 +312,11 @@ function App() {
       setTriggerRedraw(Date.now());
   
       const dataArray = imageData.data
-      const rgbArray: number[][] = []
-      for (var i = 0; i < dataArray.length; i+=4) {
-          rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2], dataArray[i+3]])
-      }
+      
+      // const rgbArray: number[][] = []
+      // for (var i = 0; i < dataArray.length; i+=4) {
+      //     rgbArray.push([dataArray[i], dataArray[i+1], dataArray[i+2], dataArray[i+3]])
+      // }
   
       //console.log('imageData', imageData);
       //console.log('rgbArray', rgbArray);
@@ -369,13 +393,68 @@ function App() {
     //   ctx.clearRect(0, 0, 128, 128);
     //   ctx.fillText(e.emoji, 32, 32);
     // }
-    send_emoji_2(e.emoji);
+
+    // this works
+    //send_emoji_2(e.emoji);
+
+    const d = doEmojiToData(e.emoji);
+    if (d) {
+      onSendPost(d.data, d.dataUrl);
+    }
   };
 
   const onChangeUnicorn = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('e', e.target.value);
     setSelectedIp(e.target.value);
     setUrl(`ws://${e.target.value}/paint`);
+  };
+
+  const onSendPost = async (payload: any, dataUrl: any) => {
+
+    const ip = unicornConfigs[selectedIndex].ip;
+    const url = `http://${ip}/emoji`;
+
+    // const rawResponse = await fetch(url, {
+    //   method: 'POST',
+    //   mode: 'no-cors',
+    //   // headers: {
+    //   //   'Accept': 'application/json',
+    //   //   'Content-Type': 'application/json'
+    //   // },
+    //   body: payload
+    // });
+    // //const content = await rawResponse.json();
+    // const content = await rawResponse.text();
+    //console.log('content', content);
+
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      //mode: 'no-cors',
+      //headers: { 'Content-Type': 'application/json' },
+      body: payload
+    };
+    fetch(url, requestOptions)
+      .then(response => response.text())
+      .then(data => {
+        console.log('content text', data);
+        console.log(data);
+    
+        if (data === 'success') {
+          console.log('success area');
+          unicornConfigs[selectedIndex].dataUrl = dataUrl;
+          setTriggerRedraw(Date.now());
+        }
+      });
+
+
+    //return content;
+  };
+
+  const onClickSend = () => {
+    const d = doEmojiToData('🥰');
+    if (d) {
+      onSendPost(d.data, d.dataUrl);
+    }
   };
 
   const options = unicornConfigs.map((u, i) => {
@@ -417,6 +496,7 @@ function App() {
       <div>
         Status: {isConnected ? <span style={{ color: 'lime'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
       </div>
+      <button onClick={onClickSend}>POST</button>
 
       <div>
         {/* <Preview name="Cosmic 1" />
