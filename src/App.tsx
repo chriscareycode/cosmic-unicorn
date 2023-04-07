@@ -65,10 +65,13 @@ const defaultUnicorn = unicornConfigs[defaultIndex];
 
 function App() {
 
+  const [isConnectedDesired, setIsConnectedDesired] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
+  const [selectedIp, setSelectedIp] = useState(defaultUnicorn.ip); // lets get rid of this
   const [selectedUnicorn, setSelectedUnicorn] = useState(defaultUnicorn);
-  const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`);
+  const [triggerRedraw, setTriggerRedraw] = useState(0);
+  const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`); // lets derive this and get rid of this
 
   useEffect(() => {
     //const url = `ws://10.200.0.123/paint`; // Galactic
@@ -76,7 +79,7 @@ function App() {
     // const url = `ws://10.200.0.125/paint`; // Cosmic 2
     //const url = `ws://10.200.0.126/paint`; // Cosmic 3
 
-    if (isConnected) {
+    if (isConnectedDesired) {
       socket = new WebSocket(url);
     }
 
@@ -200,7 +203,7 @@ function App() {
       socket.onopen = () => {
         console.log('onopen', new Date());
         console.log(`Connected to ${url}`);
-        
+        setIsConnected(true);
         //clear();
 
         //send_emoji();
@@ -222,6 +225,7 @@ function App() {
         console.log('onclose', new Date());
         socket = null;
         setIsConnected(false);
+        setIsConnectedDesired(false);
       };
     }
 
@@ -232,24 +236,32 @@ function App() {
         clearInterval(interval);
       }
     };
-  }, [isConnected, url]);
+  }, [
+    isConnectedDesired,
+    url,
+  ]);
+
+
 
   const onClickConnect = () => {
-    setIsConnected(true);
+    setIsConnectedDesired(true);
   };
   const onClickDisconnect = () => {
-    setIsConnected(false);
+    setIsConnectedDesired(false);
   };
 
   
-
+  // reconnection routine. this is super hacky lets get rid of it for something else
+  // probably want to connect, send data, disconnect instead of staying connected to the websocket
+  // all the time
+  // or probably get rid of websocket altogether
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
-    if (!isConnected && reconnect_counter < 100) {
+    if (!isConnectedDesired && reconnect_counter < 100) {
       reconnect_counter = reconnect_counter + 1;
       console.log('reconnect_counter is ', reconnect_counter);
       timer = setTimeout(() => {
-        setIsConnected(true);
+        setIsConnectedDesired(true);
       }, 2000);
     }
     return () => {
@@ -257,7 +269,7 @@ function App() {
         clearTimeout(timer);
       }
     };
-  }, [isConnected]);
+  }, [isConnectedDesired]);
 
   // const [emoji2, setEmoji] = useState('🚀');
 
@@ -269,11 +281,12 @@ function App() {
       ctx.clearRect(0, 0, 128, 128);
       const scooch = 4;
       ctx.fillText(emoji, 0, 32 - scooch);
-      const imageData = ctx.getImageData(0, 4, 32, 32);
+      const imageData = ctx.getImageData(0, 0, 32, 32);
 
-      // get data url
+      // get data url from canvas and store it in the unicornConfig (for the Preview display)
       const dataUrl = c.toDataURL();
       unicornConfigs[selectedIndex].dataUrl = dataUrl;
+      setTriggerRedraw(Date.now());
   
       const dataArray = imageData.data
       const rgbArray: number[][] = []
@@ -299,18 +312,27 @@ function App() {
       //   console.log('sending show');
       //   socket?.send('show');
       // }, 1025 * delay);
+
+      if (socket && socket.readyState === WebSocket.CONNECTING) {
+        console.log('socket still connecting...');
+      }
       
-      if (socket) {
+      if (socket && socket.readyState === WebSocket.OPEN) {
 
         // test sending full rgbarray in one payload
         // console.log('rgbarray len', JSON.stringify(rgbArray).length);
         // socket.send('rgbarray');
         // socket.send(JSON.stringify(rgbArray));
 
-        // test sending full imagedata
-        console.log('imagedata length', new Uint8Array(dataArray).length)
-        socket.send('imagedata');
-        socket.send(new Uint8Array(dataArray));
+        if (isConnected) {
+          //
+          // test sending full imagedata
+          console.log('imagedata length', new Uint8Array(dataArray).length)
+          socket.send('imagedata');
+          socket.send(new Uint8Array(dataArray));
+        } else {
+          console.log('isConnected === false');
+        }
 
         //socket?.send('show');
       } else {
@@ -352,11 +374,12 @@ function App() {
 
   const onChangeUnicorn = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('e', e.target.value);
-    setUrl(`ws://${e.target.value}/paint`)
+    setSelectedIp(e.target.value);
+    setUrl(`ws://${e.target.value}/paint`);
   };
 
   const options = unicornConfigs.map((u, i) => {
-    return <option selected={u.ip === defaultUnicorn.ip} value={u.ip}>{u.name} {u.ip}</option>;
+    return <option key={i} value={u.ip}>{u.name} {u.ip}</option>;
   });
 
   const onClickUnicornPreview = () => {
@@ -364,13 +387,24 @@ function App() {
   };
 
   const previewLoop = unicornConfigs.map((u, i) => {
-    return <Preview config={u} onClick={() => setSelectedIndex(i)} />;
+    return (
+      <Preview
+        key={i}
+        selected={i === selectedIndex}
+        config={u}
+        onClick={() => {
+          setSelectedIndex(i);
+          setSelectedIp(unicornConfigs[i].ip);
+          setUrl(`ws://${unicornConfigs[i].ip}/paint`);
+        }}
+      />
+    );
   });
 
   return (
     <div className="App">
       Unicorn Paint React{' '}<br />
-      <select onChange={onChangeUnicorn}>
+      <select onChange={onChangeUnicorn} value={selectedIp}>
         {/* <option value="10.200.0.123">Galactic 10.200.0.123</option>
         <option value="10.200.0.122" selected>Cosmic 1 10.200.0.122</option>
         <option value="10.200.0.125">Cosmic 2 10.200.0.125</option>
@@ -378,8 +412,8 @@ function App() {
         {options}
       </select>
       <br />
-      {!isConnected && <button style={{ backgroundColor: 'green', color: 'white' }} disabled={isConnected} onClick={onClickConnect}>Connect</button>}
-      {isConnected && <button style={{ backgroundColor: 'darkred', color: 'white' }} disabled={!isConnected} onClick={onClickDisconnect}>Disconnect</button>}
+      {!isConnectedDesired && <button style={{ backgroundColor: 'green', color: 'white' }} disabled={isConnectedDesired} onClick={onClickConnect}>Connect</button>}
+      {isConnectedDesired && <button style={{ backgroundColor: 'darkred', color: 'white' }} disabled={!isConnectedDesired} onClick={onClickDisconnect}>Disconnect</button>}
       <div>
         Status: {isConnected ? <span style={{ color: 'lime'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
       </div>
@@ -407,7 +441,7 @@ function App() {
         />
 
       </div>
-      <div>
+      <div className="canvas-area">
         Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
       </div>
     </div>

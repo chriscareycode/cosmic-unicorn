@@ -37,3 +37,10 @@
     transform: rotate(360deg);
   }
 }
+
+
+.canvas-area {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
