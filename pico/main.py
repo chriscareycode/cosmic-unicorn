@@ -1,7 +1,6 @@
 import os
 from microdot_asyncio import Microdot, Request, Response, send_file
 from microdot_asyncio_websocket import with_websocket
-#from microdot_cors import CORS
 from phew import connect_to_wifi
 from cosmic import CosmicUnicorn
 from picographics import PicoGraphics, DISPLAY_COSMIC_UNICORN as DISPLAY
@@ -19,36 +18,40 @@ ip = connect_to_wifi(SSID, PSK)
 
 print(f"Start painting at: http://{ip}")
 
+last_pixels = ""
+
 server = Microdot()
-
-Request.max_content_length = 1024 * 1024
-Request.max_body_length = 32 * 1024
-
-#cors = CORS(server, allowed_origins=['*'],
-#            allow_credentials=True)
 
 @server.route("/", methods=["GET"])
 def route_index(request):
-    return send_file("cosmic_paint/index.html")
+    return send_file("emoji_paint/index.html")
 
 
 @server.route("/static/<path:path>", methods=["GET"])
 def route_static(request, path):
     return send_file(f"emoji_paint/static/{path}")
 
-@server.route('/emoji', methods=["OPTIONS"])
-def send_options(req):
+@server.route('/get_pixels', methods=["GET"])
+def route_get_pixels(req):
+    global last_pixels
+    print("get_pixels")
+    #arr = []
+    #for y in range(HEIGHT):
+    #    for x in range(WIDTH):
+    #        arr.push(graphics.pixel(y, x))
+    #return arr
+    
+    #return last_pixels
+    
     res = Response()
     res.headers["Access-Control-Allow-Origin"] = '*'
-    res.headers["Access-Control-Allow-Methods"] = '*'
-    res.headers["Access-Control-Allow-Headers"] = '*'
-    res.headers["Access-Control-Allow-Credentials"] = 'true'
-    res.headers["Access-Control-Max-Age"] = '86400'
+    res.body = last_pixels
     return res
-
+    
 
 @server.post('/emoji')
 def send_emoji(req):
+    global last_pixels
     #if req.method == 'OPTIONS':
     #    res = Response(res)
     #    res.headers["Access-Control-Allow-Origin"] = '*'
@@ -65,6 +68,9 @@ def send_emoji(req):
 
     #payload = req.json
     data = req.body
+    
+    # save for later (eats memory)
+    last_pixels = data
     
     # do something with payload
     #print(data)
@@ -123,7 +129,9 @@ async def echo(request, ws):
         data = await ws.receive()
         try:
             if data == "imagedata":
+                print("got imagedata request. waiting for bytes...")
                 data = await ws.receive()
+                print("got bytes")
                 #print(len(data))
                 #print(data)
                 #data = json.loads(data)
@@ -160,11 +168,7 @@ async def echo(request, ws):
         except ValueError as e:
             print("ValueError exception", str(e))
         except Exception as e:
-            print("Error exception:", str(e))
-
-@server.errorhandler(404)
-def not_found(request):
-    return {'error': 'resource not found'}, 404
+            print("Error exception", str(e))
 
 server.run(host="0.0.0.0", port=80)
 
