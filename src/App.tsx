@@ -45,18 +45,28 @@ const unicornConfigs: UnicornType[] = [
     ip: '10.200.0.122',
     type: 'cosmic',
     dataUrl: undefined,
+    dataRgbaArray: undefined,
   },
   {
     name: 'Cosmic 2',
     ip: '10.200.0.125',
     type: 'cosmic',
     dataUrl: undefined,
+    dataRgbaArray: undefined,
   },
   {
     name: 'Cosmic 3',
     ip: '10.200.0.126',
     type: 'cosmic',
     dataUrl: undefined,
+    dataRgbaArray: undefined,
+  },
+  {
+    name: 'Cosmic 4',
+    ip: '10.200.0.127',
+    type: 'cosmic',
+    dataUrl: undefined,
+    dataRgbaArray: undefined,
   },
 ];
 
@@ -436,12 +446,13 @@ function App() {
     fetch(url, requestOptions)
       .then(response => response.text())
       .then(data => {
-        console.log('content text', data);
-        console.log(data);
+        //console.log('content text', data);
+        //console.log(data);
     
         if (data === 'success') {
-          console.log('success area');
+          //console.log('success area');
           unicornConfigs[selectedIndex].dataUrl = dataUrl;
+          unicornConfigs[selectedIndex].dataRgbaArray = payload;
           setTriggerRedraw(Date.now());
         }
       });
@@ -449,6 +460,81 @@ function App() {
 
     //return content;
   };
+
+  const onClickGet = (index: number) => {
+    const ip = unicornConfigs[index].ip;
+    const url = `http://${ip}/get_pixels`;
+    const requestOptions: RequestInit = {
+      method: 'GET',
+      //mode: 'no-cors',
+      //headers: { 'Content-Type': 'application/json' },
+      //body: payload
+    };
+    fetch(url, requestOptions)
+      .then(response => {
+        //console.log('got response', response.body.length);
+        //return response.blob();
+        return response.arrayBuffer();
+      })
+      .then(data => {
+        //console.log('get pixels', data);
+        //console.log(data);
+        //console.log('data length', data.length);
+
+        //const buffer = new ArrayBuffer(data);
+        const arrayFromBuffer = new Uint8Array(data);
+        //const arr = Array.from(data);
+        //console.log('arrayFromBuffer len', arrayFromBuffer.length);
+        //console.log(arrayFromBuffer);
+
+        // Convert Uint8Array into number[]
+        const numberArray = [];
+        for(var i=0;i<arrayFromBuffer.length-1;i++) {
+          numberArray.push(arrayFromBuffer[i]);
+        }
+
+        unicornConfigs[index].dataRgbaArray = numberArray;
+        setTriggerRedraw(Date.now());
+        
+
+        // const byteArray = new Uint8Array(data);
+        // byteArray.forEach((element, index) => {
+        //   // do something with each byte in the array
+        // });
+
+        // let rgb = [];
+        // for(var i=0;i<data.length-1;i++) {
+        //   //console.log(data.charCodeAt(i) & 0xff);
+        //   rgb.push(data.charCodeAt(i) & 0xff);
+        // }
+        // console.log(rgb);
+      }).catch((err) => {
+        console.log('get_pixels catch');
+      });
+  };
+
+  // const rgba_to_rgb = (r, g, b, a) => {
+  //   r = round(a * r);
+  //   g = round(a * g);
+  //   b = round(a * b);
+  //   return
+  // };
+
+  useEffect(() => {
+    onClickGet(0);
+    onClickGet(1);
+    onClickGet(2);
+    onClickGet(3);
+    const interv = setInterval(() => {
+      onClickGet(0);
+      onClickGet(1);
+      onClickGet(2);
+      onClickGet(3);
+    }, 15000);
+    return () => {
+      clearInterval(interv);
+    };
+  }, []);
 
   const onClickSend = () => {
     const d = doEmojiToData('🥰');
@@ -469,8 +555,10 @@ function App() {
     return (
       <Preview
         key={i}
+        keyId={i.toString()}
         selected={i === selectedIndex}
         config={u}
+        dataRgbaArray={unicornConfigs[i].dataRgbaArray}
         onClick={() => {
           setSelectedIndex(i);
           setSelectedIp(unicornConfigs[i].ip);
@@ -483,11 +571,8 @@ function App() {
   return (
     <div className="App">
       Unicorn Paint React{' '}<br />
-      <select onChange={onChangeUnicorn} value={selectedIp}>
-        {/* <option value="10.200.0.123">Galactic 10.200.0.123</option>
-        <option value="10.200.0.122" selected>Cosmic 1 10.200.0.122</option>
-        <option value="10.200.0.125">Cosmic 2 10.200.0.125</option>
-        <option value="10.200.0.126">Cosmic 3 10.200.0.126</option> */}
+      
+      {/* <select onChange={onChangeUnicorn} value={selectedIp}>
         {options}
       </select>
       <br />
@@ -495,8 +580,11 @@ function App() {
       {isConnectedDesired && <button style={{ backgroundColor: 'darkred', color: 'white' }} disabled={!isConnectedDesired} onClick={onClickDisconnect}>Disconnect</button>}
       <div>
         Status: {isConnected ? <span style={{ color: 'lime'}}>Connected</span> : <span style={{ color: 'darkred'}}>Disconnected</span>}
-      </div>
-      <button onClick={onClickSend}>POST</button>
+      </div> */}
+      
+      {/* <button onClick={onClickSend}>POST</button> */}
+
+      {/* <button onClick={onClickGet}>GET</button> */}
 
       <div>
         {/* <Preview name="Cosmic 1" />

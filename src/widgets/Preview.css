@@ -7,6 +7,7 @@
   margin-right: 8px;
   margin-top: 10px;
   position: relative;
+  border: 2px solid #666;
 }
 .Preview img {
   position: absolute;

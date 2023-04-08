@@ -3,4 +3,5 @@ export interface UnicornType {
   ip: string;
   type: 'cosmic' | 'galactic';
   dataUrl: string | undefined;
+  dataRgbaArray: number[] | undefined,
 }
