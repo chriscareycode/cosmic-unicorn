@@ -1,11 +1,9 @@
 import os
 from microdot_asyncio import Microdot, Request, Response, send_file
-from microdot_asyncio_websocket import with_websocket
 from phew import connect_to_wifi
 from cosmic import CosmicUnicorn
 from picographics import PicoGraphics, DISPLAY_COSMIC_UNICORN as DISPLAY
 from WIFI_CONFIG import SSID, PSK
-import json
 
 cu = CosmicUnicorn()
 graphics = PicoGraphics(DISPLAY)
@@ -34,141 +32,50 @@ def route_static(request, path):
 @server.route('/get_pixels', methods=["GET"])
 def route_get_pixels(req):
     global last_pixels
-    print("get_pixels")
-    #arr = []
-    #for y in range(HEIGHT):
-    #    for x in range(WIDTH):
-    #        arr.push(graphics.pixel(y, x))
-    #return arr
-    
-    #return last_pixels
-    
+    #print("get_pixels")
+        
     res = Response()
     res.headers["Access-Control-Allow-Origin"] = '*'
     res.body = last_pixels
     return res
     
 
-@server.post('/emoji')
-def send_emoji(req):
+@server.post('/set_pixels')
+def set_pixels(req):
     global last_pixels
-    #if req.method == 'OPTIONS':
-    #    res = Response(res)
-    #    res.headers["Access-Control-Allow-Origin"] = '*'
-    #    res.headers["Access-Control-Allow-Methods"] = '*'
-    #    res.headers["Access-Control-Allow-Headers"] = '*'
-    #    res.headers["Access-Control-Allow-Credentials"] = 'true'
-    #    res.headers["Access-Control-Max-Age"] = '86400'
-    #    return res
-    
-    
-    #req.max_content_length = 1024 * 1024
-    #req.max_body_length = 32 * 1024
-    print("got data")
+    #print("got data")
 
-    #payload = req.json
     data = req.body
     
-    # save for later (eats memory)
+    # save for later
     last_pixels = data
-    
-    # do something with payload
-    #print(data)
-    
-    arr = list(data)
-    #print(arr)
-    
         
+    arr = list(data)
+    
     for j in range(HEIGHT):
         for i in range(WIDTH):
             index = (j * 32 + i) * 4
-            #print("index is " + str(index))
-            #print(str(i) + "," + str(j) + "," + str(data[index]) + "," + str(data[index+1]) + "," + str(data[index+2]))
-            # graphics.set_pen(graphics.create_pen(data[index], data[index+1], data[index+2]))
-            
+                        
             #convert rgba to rgb
             r = int(data[index])
             g = int(data[index+1])
             b = int(data[index+2])
             a = int(data[index+3]) / 255
             
-            #r = ((1 - a) * r) + (a * r)
-            #g = ((1 - a) * g) + (a * g)
-            #b = ((1 - a) * b) + (a * b)
             r = round(a * r)
             g = round(a * g)
             b = round(a * b)
             
             # set the pixel
             graphics.set_pen(graphics.create_pen(r, g, b))
-            # graphics.set_pen(graphics.create_pen(int(data[index]), int(data[index+1]), int(data[index+2])))
             graphics.pixel(i, j)
     cu.update(graphics)
                 
-    #return "success"
-    
-    #return {'success': True}
     res = Response()
-    #res = Response(body={'success': True})
     res.headers["Access-Control-Allow-Origin"] = '*'
-    #res.headers["Content-Type"] = 'application/json'
-    #res.body = {'success': True}
     res.body = "success"
     return res
-    #return {'success2': True}
 
-@server.route('/paint')
-@with_websocket
-async def echo(request, ws):
-    # https://microdot.readthedocs.io/en/latest/api.html#module-microdot_asyncio_websocket
-    #request.max_content_length = 512000
-    #request.max_body_length = 512000
-    #request.max_readline = 10000
-    #request.socket_read_timeout = 1
-    while True:
-        data = await ws.receive()
-        try:
-            if data == "imagedata":
-                print("got imagedata request. waiting for bytes...")
-                data = await ws.receive()
-                print("got bytes")
-                #print(len(data))
-                #print(data)
-                #data = json.loads(data)
-                arr = list(data)
-                #print(arr)
-                
-                    
-                for j in range(HEIGHT):
-                    for i in range(WIDTH):
-                        index = (j * 32 + i) * 4
-                        #print("index is " + str(index))
-                        #print(str(i) + "," + str(j) + "," + str(data[index]) + "," + str(data[index+1]) + "," + str(data[index+2]))
-                        # graphics.set_pen(graphics.create_pen(data[index], data[index+1], data[index+2]))
-                        
-                        #convert rgba to rgb
-                        r = int(data[index])
-                        g = int(data[index+1])
-                        b = int(data[index+2])
-                        a = int(data[index+3]) / 255
-                        
-                        #r = ((1 - a) * r) + (a * r)
-                        #g = ((1 - a) * g) + (a * g)
-                        #b = ((1 - a) * b) + (a * b)
-                        r = round(a * r)
-                        g = round(a * g)
-                        b = round(a * b)
-                        
-                        # set the pixel
-                        graphics.set_pen(graphics.create_pen(r, g, b))
-                        # graphics.set_pen(graphics.create_pen(int(data[index]), int(data[index+1]), int(data[index+2])))
-                        graphics.pixel(i, j)
-                cu.update(graphics)
-
-        except ValueError as e:
-            print("ValueError exception", str(e))
-        except Exception as e:
-            print("Error exception", str(e))
 
 server.run(host="0.0.0.0", port=80)
 

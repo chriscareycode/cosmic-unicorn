@@ -422,7 +422,7 @@ function App() {
   const onSendPost = async (payload: any, dataUrl: any) => {
 
     const ip = unicornConfigs[selectedIndex].ip;
-    const url = `http://${ip}/emoji`;
+    const url = `http://${ip}/set_pixels`;
 
     // const rawResponse = await fetch(url, {
     //   method: 'POST',
