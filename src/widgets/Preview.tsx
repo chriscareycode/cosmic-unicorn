@@ -82,7 +82,7 @@ const Preview = ({
             top: 0,
             left: 0,
             transformOrigin: 'top left',
-            transform: 'scale(3)',
+            transform: 'scale(2)',
           }}
         >
         </canvas>

@@ -570,8 +570,9 @@ function App() {
 
   return (
     <div className="App">
-      Unicorn Paint React{' '}<br />
-      
+      {/* Unicorn Paint React{' '} */}
+      <br />
+
       {/* <select onChange={onChangeUnicorn} value={selectedIp}>
         {options}
       </select>
@@ -605,7 +606,7 @@ function App() {
           theme={Theme.DARK}
           onEmojiClick={onEmojiClick}
           width="100%"
-          height="80vh"
+          height="75vh"
         />
 
       </div>

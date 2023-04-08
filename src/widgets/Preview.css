@@ -1,7 +1,7 @@
 .Preview {
   display: inline-block;
-  height: 100px;
-  width: 100px;
+  height: 64px;
+  width: 64px;
   border: 1px solid #ccc;
   margin-left: 8px;
   margin-right: 8px;
@@ -9,14 +9,15 @@
   position: relative;
   border: 2px solid #666;
 }
-.Preview img {
+
+/* .Preview img {
   position: absolute;
   top: 0;
   left: 0;
   height: 100px;
   width: 100px;
-  
-}
+} */
+
 .preview-selected {
   border: 2px solid yellow;
 }
