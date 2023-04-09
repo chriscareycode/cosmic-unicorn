@@ -4,6 +4,7 @@ import './App.css';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import Preview from './widgets/Preview';
 import { UnicornType } from './types/paint';
+import { useIdleTimer } from 'react-idle-timer'
 
 const randomInt = (min: number, max: number) => { 
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -82,6 +83,24 @@ function App() {
   const [selectedUnicorn, setSelectedUnicorn] = useState(defaultUnicorn);
   const [triggerRedraw, setTriggerRedraw] = useState(0);
   const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`); // lets derive this and get rid of this
+  const [isIdle, setIsIdle] = useState(false);
+
+  const onIdle = () => {
+    console.log('onIdle');
+    setIsIdle(true);
+  }
+
+  const onActive = () => {
+    console.log('onActive');
+    setIsIdle(false);
+  }
+
+  const { getRemainingTime } = useIdleTimer({
+    onIdle,
+    onActive,
+    timeout: 5 * 60 * 1000,
+    throttle: 500
+  })
 
   useEffect(() => {
     //const url = `ws://10.200.0.123/paint`; // Galactic
@@ -525,16 +544,22 @@ function App() {
     onClickGet(1);
     onClickGet(2);
     onClickGet(3);
-    const interv = setInterval(() => {
-      onClickGet(0);
-      onClickGet(1);
-      onClickGet(2);
-      onClickGet(3);
-    }, 15000);
+
+    let interv: NodeJS.Timer | undefined;
+    if (isIdle === false) {
+      interv = setInterval(() => {
+        onClickGet(0);
+        onClickGet(1);
+        onClickGet(2);
+        onClickGet(3);
+      }, 15000);
+    }
     return () => {
-      clearInterval(interv);
+      if (interv) {
+        clearInterval(interv);
+      }
     };
-  }, []);
+  }, [isIdle]);
 
   const onClickSend = () => {
     const d = doEmojiToData('🥰');
