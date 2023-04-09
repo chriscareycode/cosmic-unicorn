@@ -74,6 +74,15 @@ const unicornConfigs: UnicornType[] = [
 const defaultIndex = 0;
 const defaultUnicorn = unicornConfigs[defaultIndex];
 
+interface FetchStateObject {
+  isError: boolean;
+  errorMessage: string;
+  errorCount: number;
+};
+interface FetchStateType {
+  [key: string]: FetchStateObject;
+};
+
 function App() {
 
   const [isConnectedDesired, setIsConnectedDesired] = useState(false);
@@ -84,6 +93,9 @@ function App() {
   const [triggerRedraw, setTriggerRedraw] = useState(0);
   const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`); // lets derive this and get rid of this
   const [isIdle, setIsIdle] = useState(false);
+  //const [isFetchError, setIsFetchError] = useState(false);
+  //const [fetchErrorMessage, setIsFetchErrorMessage] = useState('');
+  const [fetchState, setFetchState] = useState<FetchStateType>({});
 
   const onIdle = () => {
     console.log('onIdle');
@@ -515,6 +527,18 @@ function App() {
         unicornConfigs[index].dataRgbaArray = numberArray;
         setTriggerRedraw(Date.now());
         
+        //setIsFetchError(false);
+        //setIsFetchErrorMessage(``);
+        setFetchState(curr => {
+          return {
+            ...curr,
+            [url]: {
+              isError: false,
+              errorMessage: '',
+              errorCount: 0,
+            }
+          };
+        });
 
         // const byteArray = new Uint8Array(data);
         // byteArray.forEach((element, index) => {
@@ -529,6 +553,19 @@ function App() {
         // console.log(rgb);
       }).catch((err) => {
         console.log('get_pixels catch');
+        unicornConfigs[index].dataRgbaArray = undefined;
+        //setIsFetchError(true);
+        //setIsFetchErrorMessage(`Error loading ${url}`);
+        setFetchState(curr => {
+          return {
+            ...curr,
+            [url]: {
+              isError: true,
+              errorMessage: `Error loading ${url}`,
+              errorCount: curr[url] ? curr[url].errorCount + 1 : 1,
+            }
+          };
+        });
       });
   };
 
@@ -593,6 +630,12 @@ function App() {
     );
   });
 
+  const errorLoop = Object.keys(fetchState).map((url, i) => {
+    if (fetchState[url].isError) {
+      return <div key={i} className="fetch-error-message">{fetchState[url].errorMessage} x{fetchState[url].errorCount}</div>;
+    }
+  });
+
   return (
     <div className="App">
       {/* Unicorn Paint React{' '} */}
@@ -619,6 +662,8 @@ function App() {
         <Preview name="Cosmic 4" /> */}
         {previewLoop}
       </div>
+
+      {errorLoop}
 
       <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
         {/* <input

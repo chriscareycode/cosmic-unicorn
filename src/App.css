@@ -46,3 +46,11 @@
   z-index: -2;
   opacity: 0.3;
 }
+
+.fetch-error-message {
+  border: 1px solid darkred;
+  background-color: darkred;
+  color: white;
+  margin: 10px 10px 2px 10px;
+  border-radius: 10px;
+}

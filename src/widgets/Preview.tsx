@@ -18,6 +18,9 @@ const Preview = ({
   dataRgbaArray,
 }: PreviewProps) => {
 
+  /**
+   * When dataRgbaArray changes, draw it to the Preview canvas
+   */
   useEffect(() => {
     var c = document.getElementById(`canvas-${keyId}`) as HTMLCanvasElement;
     var ctx = c?.getContext("2d");
