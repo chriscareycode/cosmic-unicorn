@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import Preview from './widgets/Preview';
 
 import { useIdleTimer } from 'react-idle-timer'
 import { defaultUnicornConfigs } from './config/config';
+//import Settings from './widgets/Settings';
 
 const randomInt = (min: number, max: number) => { 
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -656,6 +657,11 @@ function App() {
       <div className="canvas-area">
         Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
       </div>
+
+      {/* <Settings
+        unicornConfigs={unicornConfigs}
+        setUnicornConfigs={setUnicornConfigs}
+      /> */}
 
     </div>
   );
