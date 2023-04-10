@@ -20,6 +20,17 @@ const Preview = ({
   isError,
 }: PreviewProps) => {
 
+  useEffect(() => {
+    var c = document.getElementById(`canvas-${keyId}`) as HTMLCanvasElement;
+    var ctx = c?.getContext("2d");
+    if (ctx) {
+      ctx.scale(2, 2);
+    }
+    return () => {
+      ctx?.scale(0.5, 0.5);
+    };
+  }, []);
+
   /**
    * When dataRgbaArray changes, draw it to the Preview canvas
    */
@@ -33,6 +44,7 @@ const Preview = ({
       // var imgData = ctx.getImageData(10, 10, 50, 50);
       // ctx.putImageData(imgData, 10, 70);
 
+      
 
       if (dataRgbaArray) {
 
@@ -81,20 +93,27 @@ const Preview = ({
       <>
         <canvas
           id={`canvas-${keyId}`}
-          height="32"
-          width="32"
+          height="64"
+          width="64"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
-            transformOrigin: 'top left',
-            transform: 'scale(2)',
+            //transformOrigin: 'top left',
+            //transform: 'scale(2)',
           }}
           >
         </canvas>
+
         {/* {config.dataUrl && <img src={config.dataUrl} />} */}
-        {config.name}
-          {isError && <div className={'preview-error'}>😡</div>}
+
+        {config.name && (
+          <div className="preview-name">{config.name}</div>
+        )}
+
+        {isError && (
+          <div className={'preview-error'}>😡 Error</div>
+        )}
       </>
     </div>
   );

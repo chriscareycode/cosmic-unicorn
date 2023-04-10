@@ -41,7 +41,7 @@
 
 .canvas-area {
   position: absolute;
-  top: 20px;
+  bottom: 10px;
   right: 20px;
   z-index: -2;
   opacity: 0.3;
@@ -52,5 +52,5 @@
   background-color: darkred;
   color: white;
   margin: 10px 10px 2px 10px;
-  border-radius: 10px;
+  border-radius: 7px;
 }

@@ -3,8 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import Preview from './widgets/Preview';
-import { UnicornType } from './types/paint';
+
 import { useIdleTimer } from 'react-idle-timer'
+import { defaultUnicornConfigs } from './config/config';
 
 const randomInt = (min: number, max: number) => { 
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -34,45 +35,10 @@ const unicornTypes = {
   },
 };
 
-const unicornConfigs: UnicornType[] = [
-  // {
-  //   name: 'Galactic',
-  //   ip: '10.200.0.123',
-  //   type: 'galactic',
-  //   dataUrl: undefined,
-  // },
-  {
-    name: 'Cosmic 1',
-    ip: '10.200.0.122',
-    type: 'cosmic',
-    dataUrl: undefined,
-    dataRgbaArray: undefined,
-  },
-  {
-    name: 'Cosmic 2',
-    ip: '10.200.0.125',
-    type: 'cosmic',
-    dataUrl: undefined,
-    dataRgbaArray: undefined,
-  },
-  {
-    name: 'Cosmic 3',
-    ip: '10.200.0.126',
-    type: 'cosmic',
-    dataUrl: undefined,
-    dataRgbaArray: undefined,
-  },
-  {
-    name: 'Cosmic 4',
-    ip: '10.200.0.127',
-    type: 'cosmic',
-    dataUrl: undefined,
-    dataRgbaArray: undefined,
-  },
-];
+
 
 const defaultIndex = 0;
-const defaultUnicorn = unicornConfigs[defaultIndex];
+const defaultUnicorn = defaultUnicornConfigs[defaultIndex];
 
 interface FetchStateObject {
   isError: boolean;
@@ -88,14 +54,15 @@ function App() {
   const [isConnectedDesired, setIsConnectedDesired] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
-  const [selectedIp, setSelectedIp] = useState(defaultUnicorn.ip); // lets get rid of this
-  const [selectedUnicorn, setSelectedUnicorn] = useState(defaultUnicorn);
+  //const [selectedIp, setSelectedIp] = useState(defaultUnicorn.ip); // lets get rid of this
+  //const [selectedUnicorn, setSelectedUnicorn] = useState(defaultUnicorn);
   const [triggerRedraw, setTriggerRedraw] = useState(0);
   const [url, setUrl] = useState(`ws://${defaultUnicorn.ip}/paint`); // lets derive this and get rid of this
   const [isIdle, setIsIdle] = useState(false);
   //const [isFetchError, setIsFetchError] = useState(false);
   //const [fetchErrorMessage, setIsFetchErrorMessage] = useState('');
   const [fetchState, setFetchState] = useState<FetchStateType>({});
+  const [unicornConfigs, setUnicornConfigs] = useState(defaultUnicornConfigs);
 
   const onIdle = () => {
     console.log('onIdle');
@@ -446,7 +413,7 @@ function App() {
 
   const onChangeUnicorn = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('e', e.target.value);
-    setSelectedIp(e.target.value);
+    //setSelectedIp(e.target.value);
     setUrl(`ws://${e.target.value}/paint`);
   };
 
@@ -626,7 +593,7 @@ function App() {
         isError={fetchState[ip] && fetchState[ip].isError}
         onClick={() => {
           setSelectedIndex(i);
-          setSelectedIp(unicornConfigs[i].ip);
+          //setSelectedIp(unicornConfigs[i].ip);
           setUrl(`ws://${unicornConfigs[i].ip}/paint`);
         }}
       />
@@ -658,7 +625,7 @@ function App() {
 
       {/* <button onClick={onClickGet}>GET</button> */}
 
-      <div>
+      <div style={{ marginTop: 8 }}>
         {/* <Preview name="Cosmic 1" />
         <Preview name="Cosmic 2" />
         <Preview name="Cosmic 3" />
@@ -666,7 +633,8 @@ function App() {
         {previewLoop}
       </div>
 
-      {errorLoop}
+      {/* Show Errors */}
+      {/* {errorLoop} */}
 
       <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
         {/* <input
@@ -675,6 +643,7 @@ function App() {
           value={emoji}
         /> */}
         {/* <button onClick={onSendEmoji}>send</button> */}
+
         <EmojiPicker
           theme={Theme.DARK}
           onEmojiClick={onEmojiClick}
@@ -683,9 +652,11 @@ function App() {
         />
 
       </div>
+
       <div className="canvas-area">
         Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
       </div>
+
     </div>
   );
 }

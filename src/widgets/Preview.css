@@ -7,7 +7,9 @@
   margin-right: 8px;
   margin-top: 10px;
   position: relative;
-  border: 2px solid #666;
+  border: 3px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /* .Preview img {
@@ -19,10 +21,24 @@
 } */
 
 .preview-selected {
-  border: 2px solid yellow;
+  border: 3px solid #bbbb00;
 }
 .preview-error {
   position: absolute;
-  top: 5px;
+  top: 20px;
   right: 5px;
+  color: #aaa;
+}
+.preview-name {
+  position: absolute;
+  top: -22px;
+  right: -3px;
+  left: -3px;
+  font-size: 0.8em;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0 4px;
+  text-align: center;
+  white-space: nowrap;
+  color: #eee;
 }
