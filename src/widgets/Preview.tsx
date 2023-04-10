@@ -3,11 +3,12 @@ import { UnicornType } from '../types/paint';
 import './Preview.css';
 
 interface PreviewProps {
-  keyId: string;
+  keyId: number;
   config: UnicornType;
   onClick: any;
   selected: boolean;
   dataRgbaArray: number[] | undefined;
+  isError: boolean;
 }
 
 const Preview = ({
@@ -16,6 +17,7 @@ const Preview = ({
   onClick,
   selected,
   dataRgbaArray,
+  isError,
 }: PreviewProps) => {
 
   /**
@@ -73,6 +75,7 @@ const Preview = ({
 
   }, [dataRgbaArray]);
 
+
   return (
     <div onClick={onClick} className={selected ? 'Preview preview-selected' : 'Preview'}>
       <>
@@ -87,10 +90,11 @@ const Preview = ({
             transformOrigin: 'top left',
             transform: 'scale(2)',
           }}
-        >
+          >
         </canvas>
         {/* {config.dataUrl && <img src={config.dataUrl} />} */}
         {config.name}
+          {isError && <div className={'preview-error'}>😡</div>}
       </>
     </div>
   );

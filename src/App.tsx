@@ -532,7 +532,7 @@ function App() {
         setFetchState(curr => {
           return {
             ...curr,
-            [url]: {
+            [ip]: {
               isError: false,
               errorMessage: '',
               errorCount: 0,
@@ -559,7 +559,7 @@ function App() {
         setFetchState(curr => {
           return {
             ...curr,
-            [url]: {
+            [ip]: {
               isError: true,
               errorMessage: `Error loading ${url}`,
               errorCount: curr[url] ? curr[url].errorCount + 1 : 1,
@@ -614,13 +614,16 @@ function App() {
   };
 
   const previewLoop = unicornConfigs.map((u, i) => {
+    const ip = unicornConfigs[i].ip;
+
     return (
       <Preview
         key={i}
-        keyId={i.toString()}
+        keyId={i}
         selected={i === selectedIndex}
         config={u}
         dataRgbaArray={unicornConfigs[i].dataRgbaArray}
+        isError={fetchState[ip] && fetchState[ip].isError}
         onClick={() => {
           setSelectedIndex(i);
           setSelectedIp(unicornConfigs[i].ip);
@@ -630,9 +633,9 @@ function App() {
     );
   });
 
-  const errorLoop = Object.keys(fetchState).map((url, i) => {
-    if (fetchState[url].isError) {
-      return <div key={i} className="fetch-error-message">{fetchState[url].errorMessage} x{fetchState[url].errorCount}</div>;
+  const errorLoop = Object.keys(fetchState).map((ip, i) => {
+    if (fetchState[ip].isError) {
+      return <div key={i} className="fetch-error-message">{fetchState[ip].errorMessage} x{fetchState[ip].errorCount}</div>;
     }
   });
 
