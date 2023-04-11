@@ -42,6 +42,8 @@ const defaultIndex = 0;
 const defaultUnicorn = defaultUnicornConfigs[defaultIndex];
 
 interface FetchStateObject {
+  isSaving: boolean;
+  isLoading: boolean;
   isError: boolean;
   errorMessage: string;
   errorCount: number;
@@ -421,6 +423,17 @@ function App() {
   const onSendPost = async (payload: any, dataUrl: any) => {
 
     const ip = unicornConfigs[selectedIndex].ip;
+
+    setFetchState(curr => {
+      return {
+        ...curr,
+        [ip]: {
+          ...curr[ip],
+          isSaving: true,
+        }
+      };
+    });
+
     const url = `http://${ip}/set_pixels`;
 
     // const rawResponse = await fetch(url, {
@@ -454,6 +467,18 @@ function App() {
           unicornConfigs[selectedIndex].dataRgbaArray = payload;
           setTriggerRedraw(Date.now());
         }
+      }).finally(() => {
+
+        setFetchState(curr => {
+          return {
+            ...curr,
+            [ip]: {
+              ...curr[ip],
+              isSaving: false,
+            }
+          };
+        });
+
       });
 
 
@@ -461,7 +486,23 @@ function App() {
   };
 
   const onClickGet = (index: number) => {
+
+    
     const ip = unicornConfigs[index].ip;
+    
+    
+    setFetchState(curr => {
+      return {
+        ...curr,
+        [ip]: {
+          ...curr[ip],
+          isLoading: true,
+        }
+      };
+    });
+
+
+
     const url = `http://${ip}/get_pixels`;
     const requestOptions: RequestInit = {
       method: 'GET',
@@ -501,6 +542,8 @@ function App() {
           return {
             ...curr,
             [ip]: {
+              ...curr[ip],
+              isLoading: false,
               isError: false,
               errorMessage: '',
               errorCount: 0,
@@ -528,6 +571,8 @@ function App() {
           return {
             ...curr,
             [ip]: {
+              ...curr[ip],
+              isLoading: false,
               isError: true,
               errorMessage: `Error loading ${url}`,
               errorCount: curr[url] ? curr[url].errorCount + 1 : 1,
@@ -591,6 +636,8 @@ function App() {
         selected={i === selectedIndex}
         config={u}
         dataRgbaArray={unicornConfigs[i].dataRgbaArray}
+        isLoading={fetchState[ip] && fetchState[ip].isLoading}
+        isSaving={fetchState[ip] && fetchState[ip].isSaving}
         isError={fetchState[ip] && fetchState[ip].isError}
         onClick={() => {
           setSelectedIndex(i);
@@ -649,7 +696,7 @@ function App() {
           theme={Theme.DARK}
           onEmojiClick={onEmojiClick}
           width="100%"
-          height="75vh"
+          height="calc(100vh - 140px)"
         />
 
       </div>

@@ -8,6 +8,8 @@ interface PreviewProps {
   onClick: any;
   selected: boolean;
   dataRgbaArray: number[] | undefined;
+  isLoading: boolean;
+  isSaving: boolean;
   isError: boolean;
 }
 
@@ -17,6 +19,8 @@ const Preview = ({
   onClick,
   selected,
   dataRgbaArray,
+  isLoading,
+  isSaving,
   isError,
 }: PreviewProps) => {
 
@@ -114,6 +118,13 @@ const Preview = ({
         {isError && (
           <div className={'preview-error'}>😡 Error</div>
         )}
+
+        <div className={isLoading ? 'preview-loading preview-loading-visible' : 'preview-loading'}>♻️</div>
+
+        {isSaving && (
+          <div className={'preview-saving'}>💾</div>
+        )}
+
       </>
     </div>
   );

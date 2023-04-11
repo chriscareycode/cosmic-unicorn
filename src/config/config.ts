@@ -29,7 +29,7 @@ export const defaultUnicornConfigs: UnicornType[] = [
     dataRgbaArray: undefined,
   },
   {
-    name: 'Kitchen',
+    name: 'Office',
     ip: '10.200.0.127',
     type: 'cosmic',
     dataUrl: undefined,

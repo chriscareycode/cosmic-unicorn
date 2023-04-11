@@ -10,6 +10,7 @@
   border: 3px solid #333;
   border-radius: 5px;
   cursor: pointer;
+  transition: border 1s ease;
 }
 
 /* .Preview img {
@@ -20,16 +21,41 @@
   width: 100px;
 } */
 
-.preview-selected {
+.Preview.preview-selected {
   border: 3px solid #bbbb00;
 }
+
 .preview-error {
   position: absolute;
   top: 20px;
   right: 5px;
   color: #aaa;
 }
-.preview-name {
+
+.preview-loading {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  color: #aaa;
+  opacity: 0;
+  transition: opacity 0.75s ease;
+  font-size: 0.7em;
+}
+.preview-loading.preview-loading-visible {
+  opacity: 1;
+}
+
+.preview-saving {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  color: #aaa;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  font-size: 0.85em;
+}
+
+.Preview .preview-name {
   position: absolute;
   top: -22px;
   right: -3px;
@@ -41,4 +67,9 @@
   text-align: center;
   white-space: nowrap;
   color: #eee;
+  transition: color 1s ease;
+}
+
+.Preview.preview-selected .preview-name {
+  color: yellow;
 }
