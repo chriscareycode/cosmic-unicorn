@@ -1,0 +1,16 @@
+.Settings {
+
+}
+
+.Settings .settings-open {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+
+  background-color: #222;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  z-index: 10;
+}
