@@ -10,7 +10,7 @@
   border: 3px solid #333;
   border-radius: 5px;
   cursor: pointer;
-  transition: border 1s ease;
+  transition: border 0.5s ease;
 }
 
 /* .Preview img {
@@ -67,7 +67,7 @@
   text-align: center;
   white-space: nowrap;
   color: #eee;
-  transition: color 1s ease;
+  transition: color 0.5s ease;
 }
 
 .Preview.preview-selected .preview-name {

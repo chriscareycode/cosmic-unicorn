@@ -74,7 +74,7 @@ function App() {
   const { getRemainingTime } = useIdleTimer({
     onIdle,
     onActive,
-    timeout: 5 * 60 * 1000,
+    timeout: 5 * 60 * 1000, // 5 minutes
     throttle: 500
   });
   /* eslint-enable  @typescript-eslint/no-unused-vars */
@@ -82,19 +82,33 @@ function App() {
   /**
    * doEmojiToData()
    * Takes an emoji as input, and returns imageData (for use to send to the unicorn),
-   * and returns dataUrl (previously used to display the preview)
-   * @param emoji 
-   * @returns 
+   * and returns dataUrl (previously used to display the preview).
+   * 
+   * This routine is a bit hacky in that I have to add this "scooch" over to get the emoji
+   * centered. When I scooch to the correct value for desktop, I found that when using the UI
+   * on a mobile device, the scooch is not correct. So the emoji is not centered correctly.
+   * Need to find a solution for this.
    */
-  const doEmojiToData = (emoji: string) => {
+  const convertEmojiToData = (emoji: string) => {
+    const scoochWriteY = 3;
+    let scoochReadX = 0; // Works for desktop
+    let scoochReadY = 0; // Works for desktop
+    if (navigator.userAgent.indexOf('Mobile') !== -1) {
+      scoochReadX = 1; // Works for mobile phone
+      scoochReadY = 0; // Works for mobile phone
+    }
+
     const c = document.querySelector('#canv') as HTMLCanvasElement;
     const ctx = c.getContext('2d', { willReadFrequently: true });
     if (ctx) {
       ctx.font = '32px monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
       ctx.clearRect(0, 0, 128, 128);
-      const scooch = 4;
-      ctx.fillText(emoji, 0, 32 - scooch);
-      const imageData = ctx.getImageData(0, 0, 32, 32);
+      ctx.fillText(emoji, 0, 32 + scoochWriteY); // Write the emoji to the canvas
+      // Different browsers (desktop, mobile) write the emoji a couple pixels off
+      // so we have to hack in this "scoochX" "scoochY" to center it
+      const imageData = ctx.getImageData(0 + scoochReadX, 0 + scoochReadY, 32, 32); // Read the emoji from canvas
 
       return {
         data: imageData.data,
@@ -143,7 +157,7 @@ function App() {
   };
 
   const onEmojiClick = (e: EmojiClickData) => {
-    const d = doEmojiToData(e.emoji);
+    const d = convertEmojiToData(e.emoji);
     if (d) {
       sendPixelsToUnicorn(d.data);
     }
@@ -299,7 +313,10 @@ function App() {
       </div>
 
       <div className="canvas-area">
-        Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
+        {/* Though we only want a 32x32 emoji, I'm setting this canvas to 40x40 */}
+        {/* Different devices write the emoji to canvas off by a couple pixels */}
+        {/* That we fix with scoochX and scoochY values above */}
+        Canvas: <canvas id="canv" width="40" height="40"></canvas>
       </div>
 
       {/* Settings area that we might use later */}
