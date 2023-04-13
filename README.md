@@ -30,9 +30,9 @@ and COUNTRY=""
 
 ### Edit the config file with your Pico IP address
 
-If you know the IP address that your pico has, then edit that IP address in the config-unicorns.json file.
+If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
 
-If you do not know the IP address, then upload emoji_paint.py and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the config-unicorns.json with the IP address of your pico and save the config file.
+If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
 
 ### Upload the files (with user interface)
 
