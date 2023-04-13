@@ -24,6 +24,9 @@ server = Microdot()
 def route_index(request):
     return send_file("emoji_paint/index.html")
 
+@server.route("/config-unicorns.json", methods=["GET"])
+def route_index(request):
+    return send_file("emoji_paint/config-unicorns.json")
 
 @server.route("/static/<path:path>", methods=["GET"])
 def route_static(request, path):

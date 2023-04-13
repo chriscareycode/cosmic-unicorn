@@ -34,7 +34,9 @@ function App() {
    * Load config file
    */
   useEffect(() => {
-    fetch("config-me.json")
+    const configFile = 'config-unicorns.json';
+    console.log(`Reading config file ${configFile}...`);
+    fetch(configFile)
       .then(response => response.json())
       .then(json => {
         console.log(json);
@@ -72,7 +74,7 @@ function App() {
 
   const doEmojiToData = (emoji: string) => {
     const c = document.querySelector('#canv') as HTMLCanvasElement;
-    const ctx = c.getContext('2d');
+    const ctx = c.getContext('2d', { willReadFrequently: true });
     if (ctx) {
       ctx.font = '32px monospace';
       ctx.clearRect(0, 0, 128, 128);
