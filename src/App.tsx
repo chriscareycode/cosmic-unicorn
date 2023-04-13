@@ -3,7 +3,7 @@ import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { useIdleTimer } from 'react-idle-timer'
 
 import Preview from './widgets/Preview';
-//import Settings from './widgets/Settings';
+//import Settings from './widgets/Settings'; // might use later
 
 import { UnicornType } from './types/paint';
 import './App.css';
@@ -60,16 +60,19 @@ function App() {
       });
   }, [setUnicornConfigs]);
 
+  /* Stop polling for image updates if the page is inactive */
   const onIdle = () => {
     console.log('onIdle');
     setIsIdle(true);
   }
 
+  /* Start polling for image updates if the page is active */
   const onActive = () => {
     console.log('onActive');
     setIsIdle(false);
   }
 
+  /* Idle timer used for onIdle and onActive */
   /* eslint-disable  @typescript-eslint/no-unused-vars */
   const { getRemainingTime } = useIdleTimer({
     onIdle,
@@ -79,6 +82,13 @@ function App() {
   });
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
+  /**
+   * doEmojiToData()
+   * Takes an emoji as input, and returns imageData (for use to send to the unicorn),
+   * and returns dataUrl (previously used to display the preview)
+   * @param emoji 
+   * @returns 
+   */
   const doEmojiToData = (emoji: string) => {
     const c = document.querySelector('#canv') as HTMLCanvasElement;
     const ctx = c.getContext('2d', { willReadFrequently: true });
@@ -91,19 +101,12 @@ function App() {
 
       return {
         data: imageData.data,
-        dataUrl: c.toDataURL(),
+        //dataUrl: c.toDataURL(),
       };
     }
   };
 
-  const onEmojiClick = (e: EmojiClickData) => {
-    const d = doEmojiToData(e.emoji);
-    if (d) {
-      onSendPost(d.data, d.dataUrl);
-    }
-  };
-
-  const onSendPost = async (payload: any, dataUrl: any) => {
+  const sendPixelsToUnicorn = async (payload: any) => {
     const ip = unicornConfigs[selectedIndex].ip;
     setFetchState(curr => {
       return {
@@ -124,11 +127,9 @@ function App() {
     fetch(url, requestOptions)
       .then(response => response.text())
       .then(data => {
-        //console.log('content text', data);
-        //console.log(data);
         if (data === 'success') {
-          //console.log('success area');
-          unicornConfigs[selectedIndex].dataUrl = dataUrl;
+          // dataUrl is used for showing the preview
+          //unicornConfigs[selectedIndex].dataUrl = dataUrl;
           unicornConfigs[selectedIndex].dataRgbaArray = payload;
           setTriggerRedraw(Date.now());
         }
@@ -145,8 +146,18 @@ function App() {
       });
   };
 
-  const onClickGet = useCallback((index: number) => {
+  const onEmojiClick = (e: EmojiClickData) => {
+    const d = doEmojiToData(e.emoji);
+    if (d) {
+      sendPixelsToUnicorn(d.data);
+    }
+  };
+
+  const getPixelsFromUnicorn = useCallback((index: number) => {
+    // Get the IP from the unicorn config
     const ip = unicornConfigs[index].ip;
+
+    // Set loading state for this unicorn
     setFetchState(curr => {
       return {
         ...curr,
@@ -192,7 +203,7 @@ function App() {
         });
 
       }).catch((err) => {
-        console.log('get_pixels catch');
+        console.log('ERROR: get_pixels catch');
         unicornConfigs[index].dataRgbaArray = undefined;
 
         setFetchState(curr => {
@@ -210,30 +221,35 @@ function App() {
       });
   }, [unicornConfigs, setFetchState]);
 
+  /**
+   * This useEffect is used to update the Previews every so often
+   */
   useEffect(() => {
 
+    const updateEveryHowManySeconds = 15;
+
     for (let i=0;i<unicornConfigs.length;i++) {
-      onClickGet(i);
+      getPixelsFromUnicorn(i);
     }
 
     let interv: NodeJS.Timer | undefined;
     if (isIdle === false) {
       interv = setInterval(() => {
         for (let i=0;i<unicornConfigs.length;i++) {
-          onClickGet(i);
+          getPixelsFromUnicorn(i);
         }
-      }, 15 * 1000);
+      }, updateEveryHowManySeconds * 1000);
     }
     return () => {
       if (interv) {
         clearInterval(interv);
       }
     };
-  }, [isIdle, onClickGet, unicornConfigs.length]);
+  }, [isIdle, getPixelsFromUnicorn, unicornConfigs.length]);
 
+  /* The array of previews that we display at the top of the page */
   const previewLoop = unicornConfigs.map((u, i) => {
     const ip = unicornConfigs[i].ip;
-
     return (
       <Preview
         key={i}
@@ -251,6 +267,7 @@ function App() {
     );
   });
 
+  /* The array of connection errors that we show under the previews */
   const errorLoop = Object.keys(fetchState).map((ip, i) => {
     if (fetchState[ip].isError) {
       return <div key={i} className="fetch-error-message">{fetchState[ip].errorMessage} x{fetchState[ip].errorCount}</div>;
@@ -261,7 +278,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* Unicorn Paint React{' '} */}
+
       <br />
 
       {/* Show previews of the Cosmic Unicorns */}
@@ -290,6 +307,7 @@ function App() {
         Canvas: <canvas id="canv" width="32" height="32" style={{ border: '1px solid orange' }}></canvas>
       </div>
 
+      {/* Settings area that we might use later */}
       {/* <Settings
         unicornConfigs={unicornConfigs}
         setUnicornConfigs={setUnicornConfigs}
