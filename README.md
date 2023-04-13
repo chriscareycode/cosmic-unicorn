@@ -10,9 +10,9 @@
 
 Here are the instructions for running this without needing to manually build the project
 
--  Download the latest from the GitHub releases. TODO: link to releases here [http://localhost:3069](http://localhost:3069) 
+-  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-paint-react/releases](https://github.com/chriscareycode/cosmic-paint-react/releases) . You only need the cosmic-paint-react-v0.0.0 file, not the source code files.
 
-- Extract the files.
+- Extract the file.
 
 - Copy `emoji_paint/config-unicorns.example.json` to `emoji_paint/config-unicorns.json`
 
