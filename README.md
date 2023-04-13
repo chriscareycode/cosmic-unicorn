@@ -1,3 +1,64 @@
+# cosmic-paint-react
+
+## Running this on a Cosmic Unicorn
+
+Download the latest from the GitHub releases, and extract the files.
+
+Copy emoji_paint/config-unicorns.example.json to emoji_paint/config-unicorns.json
+
+Edit the file emoji_paint/config-unicorns.json with your Unicorn IP address.
+
+Copy the files to your pico:
+- emoji_paint.py
+- emoji_paint/config-unicorns.json
+- emoji_paint/static/ (folder with css and js)
+
+emoji_paint.py goes in the root of your pico, and the emoji_paint/ folder contains the rest of the files.
+
+This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup with your SSID="", PSK="", and COUNTRY="".
+
+If you know the IP address that your pico has, then edit that IP address in the config-unicorns.json file.
+
+If you do not know the IP address, then upload emoji_paint.py and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the config-unicorns.json with the IP address of your pico and upload the config file.
+
+Upload the rest of the files to the pico using Thonny or another tool. 
+
+## Development
+
+
+### Running in local development
+
+This project started as a standard React app created with create-react-app. Then TypeScript was added. Then switched to Preact (to reduce the bundle size). The bundle is still quite large mostly due to the emoji-picker-react library.
+
+You need Node.js/npm to do development on this project.
+
+npm install
+npm start
+
+Then connect to the local IP address and do your local development!
+
+### Building the project for use on the Pico
+
+When you are done editing files, create a build with this command:
+
+npm run build
+
+Then run this command to delete the extra files in the build folder to free up needed space (since the pico has such little space):
+
+./delete-extra-build-files.sh
+
+The files will be in the pico/ folder. Edit the config-unicorns.json with your own unicorn information, then upload the files to your pico with Thonny.
+
+
+
+
+
+
+
+
+
+# The original create-react-app readme is below this
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
