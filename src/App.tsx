@@ -25,9 +25,6 @@ function App() {
   const [isConfigError, setIsConfigError] = useState(false);
   const [configErrorMessage, setConfigErrorMessage] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  /* eslint-disable  @typescript-eslint/no-unused-vars */
-  const [triggerRedraw, setTriggerRedraw] = useState(0);
-  /* eslint-enable  @typescript-eslint/no-unused-vars */
   const [isIdle, setIsIdle] = useState(false);
   const [fetchState, setFetchState] = useState<FetchStateType>({});
   const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
@@ -131,7 +128,6 @@ function App() {
           // dataUrl is used for showing the preview
           //unicornConfigs[selectedIndex].dataUrl = dataUrl;
           unicornConfigs[selectedIndex].dataRgbaArray = payload;
-          setTriggerRedraw(Date.now());
         }
       }).finally(() => {
         setFetchState(curr => {
@@ -187,8 +183,7 @@ function App() {
         }
 
         unicornConfigs[index].dataRgbaArray = numberArray;
-        setTriggerRedraw(Date.now());
-        
+
         setFetchState(curr => {
           return {
             ...curr,
