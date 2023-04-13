@@ -24,8 +24,17 @@ const randomInt = (min: number, max: number) => {
 //   },
 // };
 
-const defaultIndex = 0;
-const defaultUnicorn = defaultUnicornConfigs[defaultIndex];
+// Select the default Preview box to highlight
+let defaultIndex = 0;
+// If we have multiple Cosmic Unicorns in the config, select which one to start with.
+// If we are hosting this UI on one of the unicorns, auto-select that one.
+if (defaultUnicornConfigs.length > 1) {
+  for(let i=0;i<defaultUnicornConfigs.length;i++) {
+    if (defaultUnicornConfigs[i].ip === document.location.host) {
+      defaultIndex = i;
+    }
+  }
+}
 
 interface FetchStateObject {
   isSaving: boolean;
