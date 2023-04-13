@@ -49,6 +49,10 @@ emoji_paint.py goes in the root of your pico, and the emoji_paint/ folder contai
 ### Optionally upload the Python file only (without uploading the user interface)
 It's worth noting that you can choose to NOT install the user interface on the pico, to save space. For this, you will only need the WIFI_CONFIG.py and emoji_paint.py and that's it. You can choose to run the user interface on your computer, or anywhere else you want.
 
+### Optionally make this script run when the Pico boots up
+
+If you want this script to run on boot, then you need to copy the contents of `emoji_paint.py` into `main.py`. main.py is the file that starts on boot.
+
 #
 # Running the project in Development mode
 
