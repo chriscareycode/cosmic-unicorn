@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "emoji-picker-react": "^4.4.8",
+    "preact": "^10.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-idle-timer": "^5.5.3"
@@ -16,14 +17,15 @@
     "@types/node": "^16.18.20",
     "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",
+    "craco": "^0.0.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "BROWSER=none PORT=3069 react-scripts start",
-    "build": "BUILD_PATH='./pico/emoji_paint' react-scripts build",
-    "test": "react-scripts test",
+    "start": "BROWSER=none PORT=3069 craco start",
+    "build": "BUILD_PATH='./pico/emoji_paint' craco build",
+    "test": "creaco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
