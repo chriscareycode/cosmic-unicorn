@@ -2,7 +2,9 @@
 
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/photo1.png "Cosmic Emojis")
 
-![Cosmic Emojis Mobile](https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg  "Cosmic Emojis Mobile")
+<img src="https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg" alt="Mobile" width="200"/>
+
+#
 
 ## Running this on a Cosmic Unicorn
 
@@ -54,6 +56,12 @@ It's worth noting that you can choose to NOT install the user interface on the p
 ### Running in local development
 
 This project started as a standard React app created with create-react-app. Then TypeScript was added. Then switched to Preact (to reduce the bundle size). The bundle is still quite large (in pico terms) at like 290KB.
+
+Setup the config-unicorns.json file:
+
+- Copy `public/config-unicorns.example.json` to `public/config-unicorns.json`
+
+- Edit the file `public/config-unicorns.json` with your Unicorn IP address.
 
 You need Node.js/npm installed to do development on this project.
 
