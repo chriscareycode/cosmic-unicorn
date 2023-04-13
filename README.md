@@ -1,107 +1,81 @@
 # cosmic-paint-react
 
+![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/photo1.png "Cosmic Emojis")
+
+![Cosmic Emojis Mobile](https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg  "Cosmic Emojis Mobile")
+
 ## Running this on a Cosmic Unicorn
 
-Download the latest from the GitHub releases, and extract the files.
+Here are the instructions for running this without needing to manually build the project
 
-Copy emoji_paint/config-unicorns.example.json to emoji_paint/config-unicorns.json
+-  Download the latest from the GitHub releases. TODO: link to releases here [http://localhost:3069](http://localhost:3069) 
 
-Edit the file emoji_paint/config-unicorns.json with your Unicorn IP address.
+- Extract the files.
 
-Copy the files to your pico:
-- emoji_paint.py
-- emoji_paint/config-unicorns.json
-- emoji_paint/static/ (folder with css and js)
+- Copy `emoji_paint/config-unicorns.example.json` to `emoji_paint/config-unicorns.json`
 
-emoji_paint.py goes in the root of your pico, and the emoji_paint/ folder contains the rest of the files.
+- Edit the file `emoji_paint/config-unicorns.json` with your Unicorn IP address.
 
-This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup with your SSID="", PSK="", and COUNTRY="".
+- If you have multiple Cosmic Unicorns, you can add multiple entries to control them all. Make sure to add commas in the right spots so the file is valid JSON format.
+
+### Setup WIFI_CONFIG.py
+This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup like this:
+```
+SSID=""
+PSK=""
+and COUNTRY=""
+```
+
+### Edit the config file with your Pico IP address
 
 If you know the IP address that your pico has, then edit that IP address in the config-unicorns.json file.
 
-If you do not know the IP address, then upload emoji_paint.py and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the config-unicorns.json with the IP address of your pico and upload the config file.
+If you do not know the IP address, then upload emoji_paint.py and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the config-unicorns.json with the IP address of your pico and save the config file.
+
+### Upload the files (with user interface)
 
 Upload the rest of the files to the pico using Thonny or another tool. 
 
-## Development
+Copy the files to your pico:
+- emoji_paint.py
+- emoji_paint/index.html
+- emoji_paint/config-unicorns.json
+- emoji_paint/static/ (folder with css and js)
+
+emoji_paint.py goes in the root of your pico, and the emoji_paint/ folder contains the user interface.
+
+### Optionally upload the Python file only (without uploading the user interface)
+It's worth noting that you can choose to NOT install the user interface on the pico, to save space. For this, you will only need the WIFI_CONFIG.py and emoji_paint.py and that's it. You can choose to run the user interface on your computer, or anywhere else you want.
+
+#
+# Running the project in Development mode
 
 
 ### Running in local development
 
-This project started as a standard React app created with create-react-app. Then TypeScript was added. Then switched to Preact (to reduce the bundle size). The bundle is still quite large mostly due to the emoji-picker-react library.
+This project started as a standard React app created with create-react-app. Then TypeScript was added. Then switched to Preact (to reduce the bundle size). The bundle is still quite large (in pico terms) at like 290KB.
 
-You need Node.js/npm to do development on this project.
+You need Node.js/npm installed to do development on this project.
 
-npm install
-npm start
+### `npm install`
+### `npm start`
 
-Then connect to the local IP address and do your local development!
+Then connect to the local IP address and do your local development! Open [http://localhost:3069](http://localhost:3069) to view it in the browser.
 
 ### Building the project for use on the Pico
 
 When you are done editing files, create a build with this command:
 
-npm run build
-
-Then run this command to delete the extra files in the build folder to free up needed space (since the pico has such little space):
-
-./delete-extra-build-files.sh
-
-The files will be in the pico/ folder. Edit the config-unicorns.json with your own unicorn information, then upload the files to your pico with Thonny.
-
-
-
-
-
-
-
-
-
-# The original create-react-app readme is below this
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then run this special delete command to delete the extra files in the build folder to free up needed space (since the pico has such little space):
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `./delete-extra-build-files.sh`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The built files will be in the pico/ folder. Upload the files to your pico with Thonny.
 
-### `npm run eject`
+#
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Thanks to Pimoroni for creating these awesome boards!
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+2023 Chris Carey

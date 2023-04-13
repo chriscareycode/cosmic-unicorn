@@ -235,7 +235,7 @@ function App() {
    */
   useEffect(() => {
 
-    const updateEveryHowManySeconds = 15;
+    const updateEveryHowManySeconds = 30;
 
     for (let i=0;i<unicornConfigs.length;i++) {
       getPixelsFromUnicorn(i);
