@@ -1,3 +1,8 @@
+/**
+ * This file is no longer being used. Moved config over to config-me.json
+ * which is pulled in at runtime and not part of the bundle
+ */
+
 import { UnicornType } from '../types/paint';
 
 export const defaultUnicornConfigs: UnicornType[] = [

@@ -33,7 +33,7 @@ const Preview = ({
     return () => {
       ctx?.scale(0.5, 0.5);
     };
-  }, []);
+  }, [keyId]);
 
   /**
    * When dataRgbaArray changes, draw it to the Preview canvas
@@ -89,7 +89,7 @@ const Preview = ({
       }
     }
 
-  }, [dataRgbaArray]);
+  }, [keyId, dataRgbaArray]);
 
 
   return (

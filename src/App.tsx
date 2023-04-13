@@ -1,40 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { useIdleTimer } from 'react-idle-timer'
 
 import Preview from './widgets/Preview';
 //import Settings from './widgets/Settings';
 
-import { defaultUnicornConfigs } from './config/config';
-
+import { UnicornType } from './types/paint';
 import './App.css';
-
-const randomInt = (min: number, max: number) => { 
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-// const unicornTypes = {
-//   cosmic: {
-//     width: 32,
-//     height: 32,
-//   },
-//   galactic: {
-//     width: 32,
-//     height: 32,
-//   },
-// };
-
-// Select the default Preview box to highlight
-let defaultIndex = 0;
-// If we have multiple Cosmic Unicorns in the config, select which one to start with.
-// If we are hosting this UI on one of the unicorns, auto-select that one.
-if (defaultUnicornConfigs.length > 1) {
-  for(let i=0;i<defaultUnicornConfigs.length;i++) {
-    if (defaultUnicornConfigs[i].ip === document.location.host) {
-      defaultIndex = i;
-    }
-  }
-}
 
 interface FetchStateObject {
   isSaving: boolean;
@@ -43,17 +15,41 @@ interface FetchStateObject {
   errorMessage: string;
   errorCount: number;
 };
+
 interface FetchStateType {
   [key: string]: FetchStateObject;
 };
 
 function App() {
 
-  const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   const [triggerRedraw, setTriggerRedraw] = useState(0);
+  /* eslint-enable  @typescript-eslint/no-unused-vars */
   const [isIdle, setIsIdle] = useState(false);
   const [fetchState, setFetchState] = useState<FetchStateType>({});
-  const [unicornConfigs, setUnicornConfigs] = useState(defaultUnicornConfigs);
+  const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
+
+  /**
+   * Load config file
+   */
+  useEffect(() => {
+    fetch("config-me.json")
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        setUnicornConfigs(json);
+        // If we have multiple Cosmic Unicorns in the config, select which one to start with.
+        // If we are hosting this UI on one of the unicorns, auto-select that one.
+        if (json.length > 1) {
+          for(let i=0;i<json.length;i++) {
+            if (json[i].ip === document.location.host) {
+              setSelectedIndex(i);
+            }
+          }
+        }
+      });
+  }, [setUnicornConfigs]);
 
   const onIdle = () => {
     console.log('onIdle');
@@ -65,12 +61,14 @@ function App() {
     setIsIdle(false);
   }
 
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   const { getRemainingTime } = useIdleTimer({
     onIdle,
     onActive,
     timeout: 5 * 60 * 1000,
     throttle: 500
-  })
+  });
+  /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   const doEmojiToData = (emoji: string) => {
     const c = document.querySelector('#canv') as HTMLCanvasElement;
@@ -138,7 +136,7 @@ function App() {
       });
   };
 
-  const onClickGet = (index: number) => {
+  const onClickGet = useCallback((index: number) => {
     const ip = unicornConfigs[index].ip;
     setFetchState(curr => {
       return {
@@ -201,7 +199,7 @@ function App() {
           };
         });
       });
-  };
+  }, [unicornConfigs, setFetchState]);
 
   useEffect(() => {
 
@@ -222,7 +220,7 @@ function App() {
         clearInterval(interv);
       }
     };
-  }, [isIdle]);
+  }, [isIdle, onClickGet, unicornConfigs.length]);
 
   const previewLoop = unicornConfigs.map((u, i) => {
     const ip = unicornConfigs[i].ip;
@@ -247,6 +245,8 @@ function App() {
   const errorLoop = Object.keys(fetchState).map((ip, i) => {
     if (fetchState[ip].isError) {
       return <div key={i} className="fetch-error-message">{fetchState[ip].errorMessage} x{fetchState[ip].errorCount}</div>;
+    } else {
+      return undefined;
     }
   });
 
