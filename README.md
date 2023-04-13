@@ -1,5 +1,7 @@
 # cosmic-paint-react
 
+This is a project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet https://shop.pimoroni.com/products/cosmic-unicorn
+
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/photo1.png "Cosmic Emojis")
 
 <img src="https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg" alt="Mobile" width="200"/>
