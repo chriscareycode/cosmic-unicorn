@@ -22,6 +22,8 @@ interface FetchStateType {
 
 function App() {
 
+  const [isConfigError, setIsConfigError] = useState(false);
+  const [configErrorMessage, setConfigErrorMessage] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   /* eslint-disable  @typescript-eslint/no-unused-vars */
   const [triggerRedraw, setTriggerRedraw] = useState(0);
@@ -35,12 +37,14 @@ function App() {
    */
   useEffect(() => {
     const configFile = 'config-unicorns.json';
+    const configExampleFile = 'config-unicorns.example.json';
     console.log(`Reading config file ${configFile}...`);
     fetch(configFile)
       .then(response => response.json())
       .then(json => {
         console.log(json);
         setUnicornConfigs(json);
+        setIsConfigError(false);
         // If we have multiple Cosmic Unicorns in the config, select which one to start with.
         // If we are hosting this UI on one of the unicorns, auto-select that one.
         if (json.length > 1) {
@@ -50,6 +54,9 @@ function App() {
             }
           }
         }
+      }).catch(e => {
+        setIsConfigError(true);
+        setConfigErrorMessage(`ERROR: Was not able to load the config file ${configFile}. Make sure it exists. Copy example from ${configExampleFile}.`);
       });
   }, [setUnicornConfigs]);
 
@@ -257,11 +264,17 @@ function App() {
       {/* Unicorn Paint React{' '} */}
       <br />
 
+      {/* Show previews of the Cosmic Unicorns */}
       <div style={{ marginTop: 8 }}>
         {previewLoop}
       </div>
 
-      {/* Show Errors */}
+      {/* Show config error message if the file is missing */}
+      {isConfigError && (
+        <div className="fetch-error-message">{configErrorMessage}</div>
+      )}
+
+      {/* Show connection errors to individual unicorns */}
       {errorLoop}
 
       <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
