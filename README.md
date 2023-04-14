@@ -26,22 +26,22 @@ Here are the instructions for running this without needing to manually build the
 
 This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup like this:
 ```
-SSID=""
-PSK=""
-and COUNTRY=""
+SSID="fill this in with network name"
+PSK="fill this in with password"
+COUNTRY="GB"
 ```
-
-### Edit the config file with your Pico IP address
-
-If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
-
-If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
 
 ### Install required libraries
 
 In Thonny, go to Tools -> Manage Packages...
 
 Search for `microdot_asyncio` and install that. It is needed for the web server on the Pico.
+
+### Edit the config file with your Pico IP address
+
+If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
+
+If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
 
 ### Upload the files (with user interface)
 
