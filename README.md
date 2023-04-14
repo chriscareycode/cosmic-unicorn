@@ -2,7 +2,7 @@
 
 This is a project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet https://shop.pimoroni.com/products/cosmic-unicorn
 
-![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/photo1.png "Cosmic Emojis")
+![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-1.jpeg "Cosmic Emojis")
 
 <img src="https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg" alt="Mobile" width="200"/>
 
@@ -69,6 +69,10 @@ If you want this script to run on boot, then you need to copy the contents of `e
 ### Running in local development
 
 This project started as a standard React app created with create-react-app. Then TypeScript was added. Then switched to Preact (to reduce the bundle size). The bundle is still quite large (in pico terms) at like 290KB.
+
+Git Clone this project
+
+- `git clone https://github.com/chriscareycode/cosmic-paint-react.git`
 
 Setup the config-unicorns.json file:
 

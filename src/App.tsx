@@ -55,7 +55,7 @@ function App() {
         setIsConfigError(true);
         setConfigErrorMessage(`ERROR: Was not able to load the config file ${configFile}. Make sure it exists. Copy example from ${configExampleFile}.`);
       });
-  }, [setUnicornConfigs]);
+  }, [setUnicornConfigs, setIsConfigError, setConfigErrorMessage]);
 
   /* Stop polling for image updates if the page is inactive */
   const onIdle = () => {
@@ -80,7 +80,7 @@ function App() {
   /* eslint-enable  @typescript-eslint/no-unused-vars */
 
   /**
-   * doEmojiToData()
+   * convertEmojiToData()
    * Takes an emoji as input, and returns imageData (for use to send to the unicorn),
    * and returns dataUrl (previously used to display the preview).
    * 
