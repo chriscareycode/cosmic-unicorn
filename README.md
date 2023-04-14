@@ -35,7 +35,7 @@ COUNTRY="GB"
 
 In Thonny, go to Tools -> Manage Packages...
 
-Search for `microdot_asyncio` and install that. It is needed for the web server on the Pico.
+Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
 
 ### Edit the config file with your Pico IP address
 
