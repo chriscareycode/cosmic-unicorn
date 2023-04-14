@@ -22,12 +22,6 @@ Here are the instructions for running this without needing to manually build the
 
 - If you have multiple Cosmic Unicorns, you can add multiple entries to control them all. Make sure to add commas in the right spots so the file is valid JSON format.
 
-### Edit the config file with your Pico IP address
-
-If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
-
-If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
-
 ### Setup WIFI_CONFIG.py
 
 This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup like this:
@@ -36,6 +30,12 @@ SSID=""
 PSK=""
 and COUNTRY=""
 ```
+
+### Edit the config file with your Pico IP address
+
+If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
+
+If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
 
 ### Install required libraries
 
