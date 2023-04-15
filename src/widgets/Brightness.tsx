@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { debounce } from 'lodash';
 
 interface BrightnessProps {
@@ -10,7 +10,7 @@ const Brightness = ({ ip }: BrightnessProps) => {
 	const [brightness, setBrightness] = useState(0.5);
 	const [isError, setIsError] = useState(false);
 
-	const getBrightness = () => {
+	const getBrightness = useCallback(() => {
 		if (!ip) return;
 		const url = `http://${ip}/get_brightness`;
 		const requestOptions: RequestInit = {
@@ -32,7 +32,7 @@ const Brightness = ({ ip }: BrightnessProps) => {
 				console.log('get_brightness catch');
 				setIsError(true);
 			});
-	};
+	}, [ip]);
 
 	const saveBrightness = (brightness: number) => {
 		if (!ip) return;
@@ -69,7 +69,7 @@ const Brightness = ({ ip }: BrightnessProps) => {
 
 	useEffect(() => {
 		getBrightness();
-	}, [ip]);
+	}, [ip, getBrightness]);
 
 	return (
 		<div>
