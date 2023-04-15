@@ -8,9 +8,35 @@ This is a project for the Pimoroni Cosmic Unicorn that allows you to paint emoji
 
 #
 
-## Running this on a Cosmic Unicorn
+## Install required libraries
 
-Here are the instructions for running this without needing to manually build the project
+In Thonny, go to Tools -> Manage Packages...
+
+Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
+
+## Setup WIFI_CONFIG.py
+
+This script uses and requires the same `WIFI_CONFIG.py` that many of the other WiFi examples use (like cosmic_paint). That will need to be setup like this:
+```
+SSID="fill this in with network name"
+PSK="fill this in with password"
+COUNTRY="GB or US or your country"
+```
+
+## Installing the server code without user interface
+
+- From the repo, install `emoji_paint.py` on your Pico. In the repo, it can be found under the pico/ folder
+- In Thonny, run the file on the Pico, and get the IP address from the console
+- If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
+- Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
+
+If you go this route, then you will need to run the user interface on your computer or somewhere else. You will need the IP address above for configuration in the user interface.
+
+If you want to install both the server code and user interface on the Pico, read on..
+
+## Installing the server code and user interface
+
+Here are the instructions for running the server code and user interface on the Pico, using the latest pre-built release:
 
 -  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-paint-react/releases](https://github.com/chriscareycode/cosmic-paint-react/releases) . You only need the cosmic-paint-react-v0.0.0 file, not the source code files.
 
@@ -20,22 +46,7 @@ Here are the instructions for running this without needing to manually build the
 
 - Edit the file `emoji_paint/config-unicorns.json` with your Unicorn IP address.
 
-- If you have multiple Cosmic Unicorns, you can add multiple entries to control them all. Make sure to add commas in the right spots so the file is valid JSON format.
-
-### Setup WIFI_CONFIG.py
-
-This script uses and requires the same WIFI_CONFIG.py that many of the other WiFi examples use. That will need to be setup like this:
-```
-SSID="fill this in with network name"
-PSK="fill this in with password"
-COUNTRY="GB"
-```
-
-### Install required libraries
-
-In Thonny, go to Tools -> Manage Packages...
-
-Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
+- If you have multiple Cosmic Unicorns, you can add multiple entries to control them all. Make sure to add commas in the right spots so the file is valid JSON format. You may want to install the user interface only on one of the Picos, and install server files only on the others. It's up to you.
 
 ### Edit the config file with your Pico IP address
 
@@ -51,19 +62,21 @@ Copy the files to your pico:
 - emoji_paint.py
 - emoji_paint/index.html
 - emoji_paint/config-unicorns.json
-- emoji_paint/static/ (folder with css and js)
+- emoji_paint/static/ (folder with css and js files)
 
-emoji_paint.py goes in the root of your pico, and the emoji_paint/ folder contains the user interface.
-
-### Optionally upload the Python file only (without uploading the user interface)
-It's worth noting that you can choose to NOT install the user interface on the pico, to save space. For this, you will only need the WIFI_CONFIG.py and emoji_paint.py and that's it. You can choose to run the user interface on your computer, or anywhere else you want.
+`emoji_paint.py` is the server and goes in the root of your pico, and the `emoji_paint/` folder contains the user interface.
 
 ### Optionally make this script run when the Pico boots up
 
 If you want this script to run on boot, then you need to copy the contents of `emoji_paint.py` into `main.py`. main.py is the file that starts on boot.
 
+
+
+
+You're all set. Start the program and look for the IP address to connect to.
+
 #
-# Running the project in Development mode
+# Running the user interface in Development mode
 
 
 ### Running in local development
@@ -97,7 +110,9 @@ Then run this special delete command to delete the extra files in the build fold
 
 ### `./delete-extra-build-files.sh`
 
-The built files will be in the pico/ folder. Upload the files to your pico with Thonny.
+The built files will be in the pico/ folder.
+
+Upload the files to your pico with Thonny.
 
 #
 

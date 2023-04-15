@@ -79,8 +79,5 @@ def set_pixels(req):
     res.body = "success"
     return res
 
-
+# start the web server on all ips, port 80
 server.run(host="0.0.0.0", port=80)
-
-
-
