@@ -79,5 +79,26 @@ def set_pixels(req):
     res.body = "success"
     return res
 
+@server.route("/get_brightness", methods=["GET"])
+def get_brightness(req):
+    res = Response()
+    res.headers["Access-Control-Allow-Origin"] = '*'
+    res.body = str(cu.get_brightness())
+    return res
+
+@server.post("/set_brightness")
+def set_brightness(req):
+    res = Response()
+    res.headers["Access-Control-Allow-Origin"] = '*'
+    res.body = "failure"
+    
+    brightness = req.body
+    if brightness:
+        brightnessFloat = float(brightness)
+        if brightnessFloat >= 0 and brightnessFloat <= 10:
+            cu.set_brightness(brightnessFloat)
+            res.body = "success"
+    return res
+
 # start the web server on all ips, port 80
 server.run(host="0.0.0.0", port=80)
