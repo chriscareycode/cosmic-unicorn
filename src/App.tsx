@@ -141,31 +141,49 @@ function App() {
 				ctx.drawImage(img, 0, 0, 32, 32);
 				var d = ctx.getImageData(0, 0, 32, 32);
 				console.log('d', d);
-				sendPixelsToUnicorn(d.data);
+				return d;
+				
 			}
+		} else {
+			return null;
 		}
 	}, [sendPixelsToUnicorn]);
 
-	useEffect(() => {
-		setTimeout(() => {
-			const img = document.querySelector('.canvas-area img') as any;
-			console.log('img1', img);
-			if (img) {
-				img.onload = () => {
-					console.log('img loaded 1');
-					//pullImageFromEmoji();
-					setImageLoadedAt(Date.now());
-				};
-			}
-		}, 2000);
-	}, []);
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		const img = document.querySelector('.canvas-area img') as any;
+	// 		console.log('img1', img);
+	// 		if (img) {
+	// 			img.onload = () => {
+	// 				console.log('img loaded 1');
+	// 				//pullImageFromEmoji();
+	// 				setImageLoadedAt(Date.now());
+	// 			};
+	// 		}
+	// 	}, 2000);
+	// }, [unifiedCode]);
 
-	useEffect(() => {
-		pullImageFromEmoji();
-	}, [imageLoadedAt, pullImageFromEmoji]);
+	// useEffect(() => {
+	// 	pullImageFromEmoji();
+	// }, [imageLoadedAt, pullImageFromEmoji]);
 
 	const onEmojiClick = (e: EmojiClickData) => {
 		setUnifiedCode(e.unified);
+		
+
+		const img = document.querySelector('.canvas-area img') as any;
+		console.log('img1', img);
+		if (img) {
+			img.onload = () => {
+				console.log('img loaded 1');
+				const d = pullImageFromEmoji();
+				if (d) {
+					sendPixelsToUnicorn(d.data);
+				}
+				//setImageLoadedAt(Date.now());
+				img.onload = null;
+			};
+		}
 	};
 
 	const getPixelsFromUnicorn = useCallback((index: number) => {
