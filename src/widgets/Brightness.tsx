@@ -80,7 +80,7 @@ const Brightness = ({ ip }: BrightnessProps) => {
 				onChange={rangeChanged}
 				style={{ width: 200 }}
 				/>
-			[{brightness}]
+			[{brightness.toFixed(1)}]
 			{isError && <span style={{ color: 'red' }}> ERROR</span>}
 
 		</div>
