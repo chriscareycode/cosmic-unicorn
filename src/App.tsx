@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
+import EmojiPicker, { Emoji, EmojiClickData, EmojiStyle, Theme } from 'emoji-picker-react';
 import { useIdleTimer } from 'react-idle-timer'
 
 import Preview from './widgets/Preview';
@@ -30,6 +30,9 @@ function App() {
 	const [isIdle, setIsIdle] = useState(false);
 	const [fetchState, setFetchState] = useState<FetchStateType>({});
 	const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
+  const [unifiedCode, setUnifiedCode] = useState('1f423');
+  const [imageLoadedAt, setImageLoadedAt] = useState(0);
+  const [emojiStyle, setEmojiStyle] = useState(EmojiStyle.APPLE);
 
 	/**
 	 * Load config file
@@ -81,46 +84,13 @@ function App() {
 	});
 	/* eslint-enable  @typescript-eslint/no-unused-vars */
 
-	/**
-	 * convertEmojiToData()
-	 * Takes an emoji as input, and returns imageData (for use to send to the unicorn),
-	 * and returns dataUrl (previously used to display the preview).
-	 * 
-	 * This routine is a bit hacky in that I have to add this "scooch" over to get the emoji
-	 * centered. When I scooch to the correct value for desktop, I found that when using the UI
-	 * on a mobile device, the scooch is not correct. So the emoji is not centered correctly.
-	 * Need to find a solution for this.
-	 */
-	const convertEmojiToData = (emoji: string) => {
-		const scoochWriteY = 3;
-		let scoochReadX = 0; // Works for desktop
-		let scoochReadY = 0; // Works for desktop
-		if (navigator.userAgent.indexOf('Mobile') !== -1) {
-			scoochReadX = 1; // Works for mobile phone
-			scoochReadY = 0; // Works for mobile phone
+	const sendPixelsToUnicorn = useCallback(async (payload: any) => {
+		const config = unicornConfigs[selectedIndex];
+		if (!config) {
+			console.log('Cant find config', unicornConfigs, selectedIndex);
+			return;
 		}
-
-		const c = document.querySelector('#canv') as HTMLCanvasElement;
-		const ctx = c.getContext('2d', { willReadFrequently: true });
-		if (ctx) {
-			ctx.font = '32px monospace';
-			ctx.textAlign = 'left';
-			ctx.textBaseline = 'bottom';
-			ctx.clearRect(0, 0, 128, 128);
-			ctx.fillText(emoji, 0, 32 + scoochWriteY); // Write the emoji to the canvas
-			// Different browsers (desktop, mobile) write the emoji a couple pixels off
-			// so we have to hack in this "scoochX" "scoochY" to center it
-			const imageData = ctx.getImageData(0 + scoochReadX, 0 + scoochReadY, 32, 32); // Read the emoji from canvas
-
-			return {
-				data: imageData.data,
-				//dataUrl: c.toDataURL(),
-			};
-		}
-	};
-
-	const sendPixelsToUnicorn = async (payload: any) => {
-		const ip = unicornConfigs[selectedIndex].ip;
+		const ip = config.ip;
 		setFetchState(curr => {
 			return {
 				...curr,
@@ -156,13 +126,46 @@ function App() {
 					};
 				});
 			});
-	};
+	}, [selectedIndex, unicornConfigs]);
+
+	const pullImageFromEmoji = useCallback(() => {
+		const img = document.querySelector('.canvas-area img') as any;
+		//img.crossOrigin = "Anonymous";
+		console.log('img', img);
+		if (img) {
+			img.setAttribute('crossOrigin', 'Anonymous');
+			const c = document.querySelector('#canv') as HTMLCanvasElement;
+			const ctx = c.getContext('2d', { willReadFrequently: true });
+			if (ctx) {
+				ctx.clearRect(0, 0, 32, 32);
+				ctx.drawImage(img, 0, 0, 32, 32);
+				var d = ctx.getImageData(0, 0, 32, 32);
+				console.log('d', d);
+				sendPixelsToUnicorn(d.data);
+			}
+		}
+	}, [sendPixelsToUnicorn]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			const img = document.querySelector('.canvas-area img') as any;
+			console.log('img1', img);
+			if (img) {
+				img.onload = () => {
+					console.log('img loaded 1');
+					//pullImageFromEmoji();
+					setImageLoadedAt(Date.now());
+				};
+			}
+		}, 2000);
+	}, []);
+
+	useEffect(() => {
+		pullImageFromEmoji();
+	}, [imageLoadedAt, pullImageFromEmoji]);
 
 	const onEmojiClick = (e: EmojiClickData) => {
-		const d = convertEmojiToData(e.emoji);
-		if (d) {
-			sendPixelsToUnicorn(d.data);
-		}
+		setUnifiedCode(e.unified);
 	};
 
 	const getPixelsFromUnicorn = useCallback((index: number) => {
@@ -287,6 +290,21 @@ function App() {
 		}
 	});
 
+	const onChangeStyle = (e: string) => {
+		if (e === EmojiStyle.APPLE) {
+			setEmojiStyle(EmojiStyle.APPLE);
+		}
+		if (e === EmojiStyle.GOOGLE) {
+			setEmojiStyle(EmojiStyle.GOOGLE);
+		}
+		if (e === EmojiStyle.FACEBOOK) {
+			setEmojiStyle(EmojiStyle.FACEBOOK);
+		}
+		if (e === EmojiStyle.TWITTER) {
+			setEmojiStyle(EmojiStyle.TWITTER);
+		}
+	};
+
 	return (
 		<div className="App">
 
@@ -307,12 +325,20 @@ function App() {
 
 			<Brightness ip={unicornConfigs[selectedIndex]?.ip} />
 
+			<select value={emojiStyle} onChange={e => onChangeStyle(e.target.value)}>
+				<option value={EmojiStyle.GOOGLE}>GOOGLE</option>
+				<option value={EmojiStyle.APPLE}>APPLE</option>
+				<option value={EmojiStyle.FACEBOOK}>FACEBOOK</option>
+				<option value={EmojiStyle.TWITTER}>TWITTER</option>
+			</select>
+
 			<div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
 				<EmojiPicker
 					theme={Theme.DARK}
 					onEmojiClick={onEmojiClick}
 					width="100%"
 					height="calc(100vh - 140px)"
+					emojiStyle={emojiStyle}
 				/>
 			</div>
 
@@ -320,7 +346,13 @@ function App() {
 				{/* Though we only want a 32x32 emoji, I'm setting this canvas to 40x40 */}
 				{/* Different devices write the emoji to canvas off by a couple pixels */}
 				{/* That we fix with scoochX and scoochY values above */}
-				Canvas: <canvas id="canv" width="40" height="40"></canvas>
+				Canvas: <canvas id="canv" width="32" height="32"></canvas>
+        
+				<Emoji
+					emojiStyle={emojiStyle}
+					unified={unifiedCode} //"1f423"
+					size={32}
+				/>
 			</div>
 
 			{/* Settings area that we might use later */}
