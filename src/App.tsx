@@ -27,13 +27,13 @@ function App() {
 
 	const [isConfigError, setIsConfigError] = useState(false);
 	const [configErrorMessage, setConfigErrorMessage] = useState('');
-	const [selectedIndex, setSelectedIndex] = useQueryParamState('selected', 0);
+	const [selectedIndex, setSelectedIndex] = useQueryParamState('selected', 'number', 0);
 	const [isIdle, setIsIdle] = useState(false);
 	const [fetchState, setFetchState] = useState<FetchStateType>({});
 	const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
   const [unifiedCode, setUnifiedCode] = useState('1f423');
   const [imageLoadedAt, setImageLoadedAt] = useState(0);
-  const [emojiStyle, setEmojiStyle] = useQueryParamState('style', EmojiStyle.APPLE);
+  const [emojiStyle, setEmojiStyle] = useQueryParamState('style', 'string', EmojiStyle.APPLE);
 
 	/**
 	 * Load config file
@@ -129,55 +129,46 @@ function App() {
 			});
 	}, [selectedIndex, unicornConfigs]);
 
-	const pullImageFromEmoji = useCallback(() => {
+	const getImageDataFromEmojiWithCanvas = useCallback(() => {
 		const img = document.querySelector('.canvas-area img') as any;
-		//img.crossOrigin = "Anonymous";
-		console.log('img', img);
+		//console.log('img', img);
 		if (img) {
 			img.setAttribute('crossOrigin', 'Anonymous');
 			const c = document.querySelector('#canv') as HTMLCanvasElement;
-			const ctx = c.getContext('2d', { willReadFrequently: true });
+			//const ctx = c.getContext('2d', { willReadFrequently: true });
+			const ctx = c.getContext('2d');
 			if (ctx) {
 				ctx.clearRect(0, 0, 32, 32);
+				console.log('Writing img to canvas...');
 				ctx.drawImage(img, 0, 0, 32, 32);
 				var d = ctx.getImageData(0, 0, 32, 32);
-				console.log('d', d);
+				console.log('Canvas getImageData() result:', d);
 				return d;
-				
 			}
 		} else {
 			return null;
 		}
 	}, [sendPixelsToUnicorn]);
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		const img = document.querySelector('.canvas-area img') as any;
-	// 		console.log('img1', img);
-	// 		if (img) {
-	// 			img.onload = () => {
-	// 				console.log('img loaded 1');
-	// 				//pullImageFromEmoji();
-	// 				setImageLoadedAt(Date.now());
-	// 			};
-	// 		}
-	// 	}, 2000);
-	// }, [unifiedCode]);
-
-	// useEffect(() => {
-	// 	pullImageFromEmoji();
-	// }, [imageLoadedAt, pullImageFromEmoji]);
+	useEffect(() => {
+		setTimeout(() => {
+			getImageDataFromEmojiWithCanvas();
+		}, 1000);
+	}, [getImageDataFromEmojiWithCanvas]);
 
 	const onEmojiClick = (e: EmojiClickData) => {
+		// Set unified code into state
+		// This will trigger the <Emoji> component to draw (async)
 		setUnifiedCode(e.unified);
 		
-
+		// Detect when the <Emoji> component loads
+		// So we know when we can pull the image data off it
 		const img = document.querySelector('.canvas-area img') as any;
-		console.log('img1', img);
+		console.log('got emoji img', img);
 		if (img) {
 			img.onload = () => {
-				console.log('img loaded 1');
-				const d = pullImageFromEmoji();
+				console.log('emoji img loaded', img);
+				const d = getImageDataFromEmojiWithCanvas();
 				if (d) {
 					sendPixelsToUnicorn(d.data);
 				}
@@ -371,6 +362,7 @@ function App() {
 					emojiStyle={emojiStyle}
 					unified={unifiedCode} //"1f423"
 					size={32}
+					lazyLoad={false}
 				/>
 			</div>
 
