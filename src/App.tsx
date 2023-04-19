@@ -9,6 +9,7 @@ import Brightness from './widgets/Brightness';
 
 import { UnicornType } from './types/paint';
 import './App.css';
+import { useQueryParamState } from './useQueryParamState';
 
 interface FetchStateObject {
 	isSaving: boolean;
@@ -26,13 +27,13 @@ function App() {
 
 	const [isConfigError, setIsConfigError] = useState(false);
 	const [configErrorMessage, setConfigErrorMessage] = useState('');
-	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [selectedIndex, setSelectedIndex] = useQueryParamState('selected', 0);
 	const [isIdle, setIsIdle] = useState(false);
 	const [fetchState, setFetchState] = useState<FetchStateType>({});
 	const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
   const [unifiedCode, setUnifiedCode] = useState('1f423');
   const [imageLoadedAt, setImageLoadedAt] = useState(0);
-  const [emojiStyle, setEmojiStyle] = useState(EmojiStyle.APPLE);
+  const [emojiStyle, setEmojiStyle] = useQueryParamState('style', EmojiStyle.APPLE);
 
 	/**
 	 * Load config file
