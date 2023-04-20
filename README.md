@@ -27,7 +27,7 @@ COUNTRY="GB or US or your country"
 
 ## Installing the server code without user interface
 
-- From the repo, install `emoji_paint.py` on your Pico. In the repo, it can be found under the pico/ folder
+- From the repo, install `emoji_paint.py` on your Pico.
 - In Thonny, run the file on the Pico, and get the IP address from the console
 - If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
 - Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
@@ -40,7 +40,7 @@ If you want to install both the server code and user interface on the Pico, read
 
 Here are the instructions for running the server code and user interface on the Pico, using the latest pre-built release:
 
--  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-paint-react/releases](https://github.com/chriscareycode/cosmic-paint-react/releases) . You only need the cosmic-paint-react-v0.0.1.zip file, not the source code files.
+-  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-paint-react/releases](https://github.com/chriscareycode/cosmic-paint-react/releases) . You only need the cosmic-paint-react-v0.0.2.zip file, not the source code files.
 
 - Extract the file.
 
