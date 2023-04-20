@@ -10,6 +10,8 @@ This is a project for the Pimoroni Cosmic Unicorn that allows you to paint emoji
 
 ## Install required libraries
 
+Connect your Pico to the computer and run Thonny. Select your Pico by clicking on the bottom right corner in Thonny. You should see the list of files on the Pico in the bottom left section. Stop any running process by clicking the Stop icon.
+
 In Thonny, go to Tools -> Manage Packages...
 
 Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
