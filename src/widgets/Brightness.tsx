@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { debounce } from 'lodash';
+import './Brightness.css';
 
 interface BrightnessProps {
 	ip?: string;
@@ -72,16 +73,18 @@ const Brightness = ({ ip }: BrightnessProps) => {
 	}, [ip, getBrightness]);
 
 	return (
-		<div>
-			Brightness{' '}
-			<input
-				type="range" min="0" max="1" step="0.1"
-				value={brightness}
-				onChange={rangeChanged}
-				style={{ width: 200 }}
-				/>
-			[{brightness.toFixed(1)}]
-			{isError && <span style={{ color: 'red' }}> ERROR</span>}
+		<div className="Brightness">
+			<div>
+				Brightness{' '}
+				<input
+					type="range" min="0" max="1" step="0.1"
+					value={brightness}
+					onChange={rangeChanged}
+					style={{ width: 200 }}
+					/>
+				{brightness.toFixed(1)}
+				{isError && <span style={{ color: 'red' }}> ERROR</span>}
+			</div>
 
 		</div>
 	);

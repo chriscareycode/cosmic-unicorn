@@ -333,14 +333,23 @@ function App() {
 			{/* Show connection errors to individual unicorns */}
 			{errorLoop}
 
-			<Brightness ip={unicornConfigs[selectedIndex]?.ip} />
+			<Brightness
+				ip={unicornConfigs[selectedIndex]?.ip}
+				selectedIndex={selectedIndex}
+				setUnicornConfigs={setUnicornConfigs}
+			/>
 
-			<select value={emojiStyle} onChange={e => onChangeStyle(e.target.value)}>
-				<option value={EmojiStyle.GOOGLE}>GOOGLE</option>
-				<option value={EmojiStyle.APPLE}>APPLE</option>
-				<option value={EmojiStyle.FACEBOOK}>FACEBOOK</option>
-				<option value={EmojiStyle.TWITTER}>TWITTER</option>
-			</select>
+			<div className="Brightness">
+				<div>
+					Emoji Style:{' '}&nbsp;
+					<select value={emojiStyle} onChange={e => onChangeStyle(e.target.value)}>
+						<option value={EmojiStyle.APPLE}>APPLE</option>
+						<option value={EmojiStyle.GOOGLE}>GOOGLE</option>
+						<option value={EmojiStyle.FACEBOOK}>FACEBOOK</option>
+						<option value={EmojiStyle.TWITTER}>TWITTER</option>
+					</select>
+				</div>
+			</div>
 
 			<div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
 				<EmojiPicker
