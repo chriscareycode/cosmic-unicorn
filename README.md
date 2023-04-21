@@ -25,6 +25,10 @@ PSK="fill this in with password"
 COUNTRY="GB or US or your country"
 ```
 
+## Installing on multiple Cosmic Unicorns
+
+A note that if you are installing this on multiple Cosmic Unicorns, that you can install the user interface code (which is quite large) on only one device. On the other devices you only need to install the server code `emoji_paint.py`
+
 ## Installing the server code without user interface
 
 - From the repo, install `emoji_paint.py` on your Pico.
