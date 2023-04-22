@@ -1,4 +1,4 @@
-.Brightness {
+.Controls {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,7 +6,7 @@
   user-select: none;
 }
 
-.Brightness > div {
+.Controls > div {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   margin-left: auto;
@@ -18,7 +18,7 @@
   align-items: center;
 }
 
-.Brightness > div > select {
+.Controls > div > select {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }

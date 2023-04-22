@@ -8,8 +8,9 @@ import Brightness from './widgets/Brightness';
 //import Settings from './widgets/Settings'; // might use later
 
 import { UnicornType } from './types/paint';
-import './App.css';
 import { useQueryParamState } from './useQueryParamState';
+import './App.css';
+import './widgets/Controls.css';
 
 interface FetchStateObject {
 	isSaving: boolean;
@@ -84,6 +85,53 @@ function App() {
 		throttle: 500
 	});
 	/* eslint-enable  @typescript-eslint/no-unused-vars */
+
+	useEffect(() => {
+		// document.onpaste = (evt) => {
+		// 	console.log('onpaste');
+		// 	const dT = evt.clipboardData; // || window.clipboardData;
+		// 	const file = dT?.files[ 0 ];
+		// 	console.log( file );
+		// };
+
+		const onPaste = (event: any) => {
+			const items = event.clipboardData?.items;
+			if (!items) { return; }
+			for (let i = 0; i < items.length; i++) {
+				const item = items[i];
+		
+				if (item.type.indexOf("image") !== -1) {
+					const blob = item.getAsFile();
+					const reader = new FileReader();
+		
+					reader.addEventListener("load", function() {
+						console.log('reader.result is', reader.result);
+						//imagePreview.src = reader.result;
+						const img = document.querySelector('.canvas-area img') as any;
+						img.src = reader.result;
+						setTimeout(() => {
+							const d = getImageDataFromEmojiWithCanvas();
+							if (d) {
+								sendPixelsToUnicorn(d.data);
+							}
+						}, 0);
+					});
+					console.log('blob', blob);
+					if (blob) {
+						const slicedBlob = blob.slice(0, blob.size, blob.type);
+						console.log('slicedBlob', slicedBlob);
+						reader.readAsDataURL(slicedBlob);
+					}
+					//reader.readAsDataURL(blob);
+				}
+			}
+		};
+
+		document.addEventListener("paste", onPaste);
+		return () => {
+			document.removeEventListener("paste", onPaste);
+		};
+	}, [unicornConfigs, selectedIndex]);
 
 	const sendPixelsToUnicorn = useCallback(async (payload: any) => {
 		const config = unicornConfigs[selectedIndex];
@@ -339,7 +387,7 @@ function App() {
 				// setUnicornConfigs={setUnicornConfigs}
 			/>
 
-			<div className="Brightness">
+			<div className="Controls">
 				<div>
 					Emoji Style:{' '}&nbsp;
 					<select value={emojiStyle} onChange={e => onChangeStyle(e.target.value)}>

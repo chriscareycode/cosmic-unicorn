@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { debounce } from 'lodash';
-import './Brightness.css';
+import { UnicornType } from "../types/paint";
 
 interface BrightnessProps {
 	ip?: string;
+	selectedIndex: number;
+	setUnicornConfigs: React.Dispatch<React.SetStateAction<UnicornType[]>>;
 }
 
-const Brightness = ({ ip }: BrightnessProps) => {
+const Brightness = ({
+	ip,
+	selectedIndex,
+	setUnicornConfigs,
+}: BrightnessProps) => {
 
 	const [brightness, setBrightness] = useState(0.5);
 	const [isError, setIsError] = useState(false);
@@ -73,7 +79,7 @@ const Brightness = ({ ip }: BrightnessProps) => {
 	}, [ip, getBrightness]);
 
 	return (
-		<div className="Brightness">
+		<div className="Controls">
 			<div>
 				Brightness{' '}
 				<input
