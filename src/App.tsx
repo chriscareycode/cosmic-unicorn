@@ -383,8 +383,8 @@ function App() {
 
 			<Brightness
 				ip={unicornConfigs[selectedIndex]?.ip}
-				// selectedIndex={selectedIndex}
-				// setUnicornConfigs={setUnicornConfigs}
+				selectedIndex={selectedIndex}
+				setUnicornConfigs={setUnicornConfigs}
 			/>
 
 			<div className="Controls">
@@ -425,9 +425,9 @@ function App() {
 
 			{/* Settings area that we might use later */}
 			{/* <Settings
-        unicornConfigs={unicornConfigs}
-        setUnicornConfigs={setUnicornConfigs}
-      /> */}
+				unicornConfigs={unicornConfigs}
+				setUnicornConfigs={setUnicornConfigs}
+			/> */}
 
 		</div>
 	);
