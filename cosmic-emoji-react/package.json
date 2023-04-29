@@ -1,6 +1,6 @@
 {
-  "name": "cosmic-paint-react",
-  "version": "0.0.2",
+  "name": "cosmic-emoji-react",
+  "version": "0.0.3",
   "private": true,
   "dependencies": {
     "emoji-picker-react": "^4.4.8",

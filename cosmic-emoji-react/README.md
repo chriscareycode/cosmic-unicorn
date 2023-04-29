@@ -1,4 +1,4 @@
-# cosmic-paint-react
+# cosmic-emoji-react
 
 This is a project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet https://shop.pimoroni.com/products/cosmic-unicorn
 
@@ -44,7 +44,7 @@ If you want to install both the server code and user interface on the Pico, read
 
 Here are the instructions for running the server code and user interface on the Pico, using the latest pre-built release:
 
--  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-paint-react/releases](https://github.com/chriscareycode/cosmic-paint-react/releases) . You only need the cosmic-paint-react-v0.0.2.zip file, not the source code files.
+-  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-unicorn/releases](https://github.com/chriscareycode/cosmic-unicorn/releases) . You only need the cosmic-paint-react-v0.0.2.zip file, not the source code files.
 
 - Extract the file.
 
@@ -91,7 +91,11 @@ This project started as a standard React app created with create-react-app. Then
 
 Git Clone this project
 
-- `git clone https://github.com/chriscareycode/cosmic-paint-react.git`
+- `git clone https://github.com/chriscareycode/cosmic-unicorn.git`
+
+Change into cosmic-emoji-react folder
+
+- `cd cosmic-emoji-react`
 
 Setup the config-unicorns.json file:
 
