@@ -139,12 +139,12 @@
               console.log('got imagedata from canvas', z.data);
               // for(let i=0;i<d.data.length;i=i+4) {
               // }
-              let a = new Uint8Array();
-              let b = new Uint8Array();
-              let c = new Uint8Array();
-              let d = new Uint8Array();
-              for(let i=0;i<64;i++) {
-                for(let j=0;j<64;j++) {
+              let a = [];
+              let b = [];
+              let c = [];
+              let d = [];
+              for(let j=0;j<64;j++) {
+                for(let i=0;i<64;i++) {
                   const index = (j * 64 + i) * 4;
                   if (i < 32 && j < 32) {
                     a.push(z.data[index]);
@@ -172,12 +172,16 @@
                   }
                 }
               }
-              console.log('data', a, b, c, d);
+              console.log('data to send to unicorns', a, b, c, d);
 
-              sendPixelsToUnicorn(0, a);
-              sendPixelsToUnicorn(1, b);
-              sendPixelsToUnicorn(2, c);
-              sendPixelsToUnicorn(3, d);
+              //sendPixelsToUnicorn(0, a);
+              //sendPixelsToUnicorn(1, b);
+              //sendPixelsToUnicorn(2, c);
+              //sendPixelsToUnicorn(3, d);
+              sendPixelsToUnicorn(0, new Uint8Array(a));
+              sendPixelsToUnicorn(1, new Uint8Array(b));
+              sendPixelsToUnicorn(2, new Uint8Array(c));
+              sendPixelsToUnicorn(3, new Uint8Array(d));
               //sendPixelsToUnicorn(d.data);
             }
           }, 0);
@@ -201,6 +205,7 @@
     var c = document.getElementById(`canvas-${index}`);
 		var ctx = c?.getContext("2d");
 		if (ctx) {
+      console.log('writePixelsToCanvas', index, dataRgbaArray);
       //ctx.scale(2, 2);
 			if (dataRgbaArray) {
 				for (var y = 0; y < 32; y++) {
@@ -232,6 +237,7 @@
 				ctx.fillStyle = `rgb(0, 0, 0)`;
 				ctx.fillRect(0, 0, 32, 32);
 			}
+      
 		}
   };
 
@@ -243,6 +249,7 @@
 		const requestOptions = {
 			method: 'GET',
 		};
+    console.log(`readPixelsFromCosmic(${index})`, url);
 		fetch(url, requestOptions)
 			.then(response => {
 				//console.log('got response', response.body.length);
