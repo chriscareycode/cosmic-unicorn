@@ -11,6 +11,7 @@ These are really difficult to capture on the phone camera. In person, they are m
 
 A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet.
 - Written in TypeScript, React
+
 [cosmic-emoji-react](cosmic-emoji-react/)
 
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-1.jpeg "Cosmic Emojis")
@@ -20,7 +21,11 @@ A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on the
 ## [cosmic paste](cosmic-paste/)
 
 Paste from clipboard to the Cosmic Unicorn
+
+This weekend hack project currently only supports pasting to 4 cosmic unicorns. I will update the project to support pasting both to 1 or 4 cosmic unicorn soon..
+
 - Written in HTML and Vanilla JavaScript
+
 [cosmic paste](cosmic-paste/)
 
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-paste-1.jpeg "Cosmic Paste")
