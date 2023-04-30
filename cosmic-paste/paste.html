@@ -11,20 +11,27 @@
 <html>
 <head>
 <style>
-  .my-child {
+  body {
+    font-family: sans-serif;
+  }
+  .cosmic-square {
     height: 128px;
     width: 128px;
-    border: 1px solid orange;
+    border: 3px solid #222;
     display: inline-block;
     position: relative;
+    margin: 2px;
   }
-  .my-child canvas {
+  .cosmic-square canvas {
     height: 128px;
     width: 128px;
     position: absolute;
     top: 0;
     left: 0;
-    border: 3px solid green;
+    border: 0px solid green;
+  }
+  .canvas-area canvas {
+    margin-top: 10px;
   }
   .canvas-area canvas {
     height: 64px;
@@ -32,7 +39,7 @@
     /* position: absolute;
     top: 0;
     left: 0; */
-    border: 3px solid green;
+    border: 1px solid #222;
   }
   .canvas-area img {
     height: 64px;
@@ -40,17 +47,17 @@
     /* position: absolute;
     top: 0;
     left: 0; */
-    border: 3px solid green;
+    border: 1px solid #222;
   }
 </style>
 </head>
 <body>
-  <h1>Paste</h1>
+  <h1>Paste to Cosmic Unicorn</h1>
   <div id="cosmic-area"></div>
 
   <div class="canvas-area">
-    Canvas: <canvas id="canv" width="64" height="64"></canvas>
-    <img />
+    canvas: <canvas id="canv" width="64" height="64"></canvas>
+    &lt;img&gt; tag: <img />
   </div>
 
 <script>
@@ -324,7 +331,7 @@
 
       let d = document.createElement('div');
       d.id = `cosmic-${i}`;
-      d.className = 'my-child';
+      d.className = 'cosmic-square';
       d.innerHTML = `
       <canvas
         id="canvas-${i}"
