@@ -79,16 +79,6 @@
 			return;
 		}
 		const ip = config.ip;
-		// setFetchState(curr => {
-		// 	return {
-		// 		...curr,
-		// 		[ip]: {
-		// 			...curr[ip],
-		// 			isSaving: true,
-		// 		}
-		// 	};
-		// });
-
 		const url = `http://${ip}/set_pixels`;
 
 		const requestOptions = {
@@ -99,30 +89,18 @@
 			.then(response => response.text())
 			.then(data => {
 				if (data === 'success') {
-					// dataUrl is used for showing the preview
-					//unicornConfigs[selectedIndex].dataUrl = dataUrl;
 					unicornConfigs[selectedIndex].dataRgbaArray = payload;
 				}
 			}).finally(() => {
-				// setFetchState(curr => {
-				// 	return {
-				// 		...curr,
-				// 		[ip]: {
-				// 			...curr[ip],
-				// 			isSaving: false,
-				// 		}
-				// 	};
-				// });
+				// do something
 			});
   };
 
   const getImageDataFromEmojiWithCanvas = () => {
 		const img = document.querySelector('.canvas-area img');
-		//console.log('img', img);
 		if (img) {
 			img.setAttribute('crossOrigin', 'Anonymous');
 			const c = document.querySelector('#canv');
-			//const ctx = c.getContext('2d', { willReadFrequently: true });
 			const ctx = c.getContext('2d');
 			if (ctx) {
 				ctx.clearRect(0, 0, pixelWidth, pixelWidth);
@@ -149,15 +127,12 @@
   
         reader.addEventListener("load", function() {
           console.log('reader.result is', reader.result);
-          //imagePreview.src = reader.result;
           const img = document.querySelector('.canvas-area img');
           img.src = reader.result;
           setTimeout(() => {
             const z = getImageDataFromEmojiWithCanvas();
             if (z) {
               console.log('got imagedata from canvas', z.data);
-              // for(let i=0;i<d.data.length;i=i+4) {
-              // }
               let a = [];
               let b = [];
               let c = [];
@@ -193,15 +168,10 @@
               }
               console.log('data to send to unicorns', a, b, c, d);
 
-              //sendPixelsToUnicorn(0, a);
-              //sendPixelsToUnicorn(1, b);
-              //sendPixelsToUnicorn(2, c);
-              //sendPixelsToUnicorn(3, d);
               sendPixelsToUnicorn(0, new Uint8Array(a));
               sendPixelsToUnicorn(1, new Uint8Array(b));
               sendPixelsToUnicorn(2, new Uint8Array(c));
               sendPixelsToUnicorn(3, new Uint8Array(d));
-              //sendPixelsToUnicorn(d.data);
             }
           }, 0);
         });
@@ -211,14 +181,11 @@
           console.log('slicedBlob', slicedBlob);
           reader.readAsDataURL(slicedBlob);
         }
-        //reader.readAsDataURL(blob);
       }
     }
   };
 
 	document.addEventListener("paste", onPaste);
-
-
 
   const writePixelsToCanvas = (index, dataRgbaArray) => {
     var c = document.getElementById(`canvas-${index}`);
@@ -241,9 +208,6 @@
 						const rr = Math.round(r * aa);
 						const gg = Math.round(g * aa);
 						const bb = Math.round(b * aa);
-
-						// Draw rgba to canvas (does not work)
-						//ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
 
 						// Draw rgb to canvas
 						ctx.fillStyle = `rgb(${rr}, ${gg}, ${bb})`;
@@ -270,7 +234,6 @@
 		fetch(url, requestOptions)
 			.then(response => {
 				//console.log('got response', response.body.length);
-				//return response.blob();
 				return response.arrayBuffer();
 			})
 			.then(data => {
@@ -285,35 +248,9 @@
 
         writePixelsToCanvas(index, numberArray);
 
-				// setFetchState(curr => {
-				// 	return {
-				// 		...curr,
-				// 		[ip]: {
-				// 			...curr[ip],
-				// 			isLoading: false,
-				// 			isError: false,
-				// 			errorMessage: '',
-				// 			errorCount: 0,
-				// 		}
-				// 	};
-				// });
-
 			}).catch((err) => {
 				console.log('ERROR: get_pixels catch');
 				unicornConfigs[index].dataRgbaArray = undefined;
-
-				// setFetchState(curr => {
-				// 	return {
-				// 		...curr,
-				// 		[ip]: {
-				// 			...curr[ip],
-				// 			isLoading: false,
-				// 			isError: true,
-				// 			errorMessage: `Error loading ${url}`,
-				// 			errorCount: curr[url] ? curr[url].errorCount + 1 : 1,
-				// 		}
-				// 	};
-				// });
 			});
   };
 
