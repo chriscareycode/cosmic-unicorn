@@ -33,7 +33,7 @@ COUNTRY="GB or US or your country"
 - Upload `cosmic-paste/config-unicorns.json` to your Pico in a `cosmic-paste/` folder.
 - Upload `cosmic-paste/paint.html` on your Pico in a `cosmic-paste/` folder.
 
-Load the user interface at `http://<your-pico-ip>/paint.html`
+Load the user interface at `http://<your-pico-ip-address>/`
 
 ## Local Development
 

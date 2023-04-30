@@ -30,8 +30,9 @@
     left: 0;
     border: 0px solid green;
   }
-  .canvas-area canvas {
-    margin-top: 10px;
+  .canvas-area {
+    margin-top: 40px;
+    opacity: 0.5;
   }
   .canvas-area canvas {
     height: 64px;
@@ -47,11 +48,19 @@
 </head>
 <body>
   <h1>Paste to Cosmic Unicorn</h1>
+  <div>
+    Control-V or Command-V to paste your image.
+    <br />
+    The image must be perfectly square or it will be distorted
+    <br />
+    <br />
+  </div>
   <div id="cosmic-area"></div>
 
   <div class="canvas-area">
-    canvas: <canvas id="canv" width="64" height="64"></canvas>
+    DEBUG AREA:<br />
     &lt;img&gt; tag: <img />
+    canvas: <canvas id="canv" width="64" height="64"></canvas>
   </div>
 
 <script>
