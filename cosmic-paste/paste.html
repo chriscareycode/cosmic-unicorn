@@ -10,9 +10,14 @@ Make sure to add commas between for correct JSON formatting.
 <html>
 
 <head>
+	<title>Paste to Cosmic Unicorn</title>
 	<style>
 		body {
 			font-family: sans-serif;
+		}
+
+		#cosmic-area {
+			margin-top: 20px;
 		}
 
 		.cosmic-square {
@@ -49,6 +54,14 @@ Make sure to add commas between for correct JSON formatting.
 			width: 64px;
 			border: 1px solid #222;
 		}
+
+		.cosmic-info {
+			position: absolute;
+			bottom: 0;
+			z-index: 2;
+			border: 0px solid orange;
+			font-size: 0.8em;
+		}
 	</style>
 </head>
 
@@ -61,283 +74,338 @@ Make sure to add commas between for correct JSON formatting.
 		<br />
 		<br />
 	</div>
+
+	<div>
+		Paste to:
+		<button id="btn-1">one</button>
+		<button id="btn-4">four</button>
+		<!-- <select>
+			<option>one</option>
+			<option>four</option>
+		</select> -->
+		<br />
+		<!-- Brightness:
+		<input id="brightness" type="range" min="0" max="1" step="0.1" /> 0.5 -->
+	</div>
+
 	<div id="cosmic-area"></div>
 
 	<div class="canvas-area">
 		DEBUG AREA:<br />
 		&lt;img&gt; tag: <img />
-		canvas: <canvas id="canv" width="64" height="64"></canvas>
+		canvas: <canvas id="canv" width="32" height="32"></canvas>
 	</div>
 
 	<script>
 		(function () {
 
-			let unicornConfigs = [];
+let unicornConfigs = []; // Loaded from config-unicorns.json
 
-			let selectedIndex = 0;
+let howManyUnicorns = 1; // 1 or 4
+let pixelWidth = 32; // 32 for 1, and 64 for 4
 
-			let pixelWidth = 64;
+const sendPixelsToUnicorn = (index, payload) => {
+	const config = unicornConfigs[index];
+	if (!config) {
+		console.log('Cant find config', unicornConfigs, index);
+		return;
+	}
+	const ip = config.ip;
+	const url = `http://${ip}/set_pixels`;
 
-			const sendPixelsToUnicorn = (index, payload) => {
-				const config = unicornConfigs[index];
-				if (!config) {
-					console.log('Cant find config', unicornConfigs, index);
-					return;
-				}
-				const ip = config.ip;
-				const url = `http://${ip}/set_pixels`;
+	const requestOptions = {
+		method: 'POST',
+		body: payload
+	};
+	fetch(url, requestOptions)
+		.then(response => response.text())
+		.then(data => {
+			if (data === 'success') {
+				unicornConfigs[index].dataRgbaArray = payload;
+			}
+		}).finally(() => {
+			// do something
+		});
+};
 
-				const requestOptions = {
-					method: 'POST',
-					body: payload
-				};
-				fetch(url, requestOptions)
-					.then(response => response.text())
-					.then(data => {
-						if (data === 'success') {
-							unicornConfigs[selectedIndex].dataRgbaArray = payload;
-						}
-					}).finally(() => {
-						// do something
-					});
-			};
+const getImageDataFromEmojiWithCanvas = () => {
+	const img = document.querySelector('.canvas-area img');
+	if (img) {
+		img.setAttribute('crossOrigin', 'Anonymous');
+		const c = document.querySelector('#canv');
+		const ctx = c.getContext('2d');
+		if (ctx) {
+			ctx.clearRect(0, 0, pixelWidth, pixelWidth);
+			console.log(`Writing img to canvas... pixelWidth ${pixelWidth}`);
+			ctx.drawImage(img, 0, 0, pixelWidth, pixelWidth);
+			var d = ctx.getImageData(0, 0, pixelWidth, pixelWidth);
+			console.log('Canvas getImageData() result:', d);
+			return d;
+		}
+	} else {
+		return null;
+	}
+};
 
-			const getImageDataFromEmojiWithCanvas = () => {
+const sendPixelsToFourUnicorns = (data) => {
+	let a = [];
+	let b = [];
+	let c = [];
+	let d = [];
+	for (let j = 0; j < 64; j++) {
+		for (let i = 0; i < 64; i++) {
+			const index = (j * 64 + i) * 4;
+			if (i < 32 && j < 32) {
+				a.push(data[index]);
+				a.push(data[index + 1]);
+				a.push(data[index + 2]);
+				a.push(data[index + 3]);
+			}
+			if (i >= 32 && j < 32) {
+				b.push(data[index]);
+				b.push(data[index + 1]);
+				b.push(data[index + 2]);
+				b.push(data[index + 3]);
+			}
+			if (i < 32 && j >= 32) {
+				c.push(data[index]);
+				c.push(data[index + 1]);
+				c.push(data[index + 2]);
+				c.push(data[index + 3]);
+			}
+			if (i >= 32 && j >= 32) {
+				d.push(data[index]);
+				d.push(data[index + 1]);
+				d.push(data[index + 2]);
+				d.push(data[index + 3]);
+			}
+		}
+	}
+	console.log('data to send to 4 unicorns', a, b, c, d);
+
+	sendPixelsToUnicorn(0, new Uint8Array(a));
+	sendPixelsToUnicorn(1, new Uint8Array(b));
+	sendPixelsToUnicorn(2, new Uint8Array(c));
+	sendPixelsToUnicorn(3, new Uint8Array(d));
+};
+
+const onPaste = (event) => {
+	const items = event.clipboardData?.items;
+	if (!items) { return; }
+	for (let i = 0; i < items.length; i++) {
+		const item = items[i];
+
+		if (item.type.indexOf("image") !== -1) {
+			const blob = item.getAsFile();
+			const reader = new FileReader();
+
+			reader.addEventListener("load", function () {
+				console.log('reader.result is', reader.result);
 				const img = document.querySelector('.canvas-area img');
-				if (img) {
-					img.setAttribute('crossOrigin', 'Anonymous');
-					const c = document.querySelector('#canv');
-					const ctx = c.getContext('2d');
-					if (ctx) {
-						ctx.clearRect(0, 0, pixelWidth, pixelWidth);
-						console.log('Writing img to canvas...');
-						ctx.drawImage(img, 0, 0, pixelWidth, pixelWidth);
-						var d = ctx.getImageData(0, 0, pixelWidth, pixelWidth);
-						console.log('Canvas getImageData() result:', d);
-						return d;
-					}
-				} else {
-					return null;
-				}
-			};
+				img.src = reader.result;
+				setTimeout(() => {
+					const z = getImageDataFromEmojiWithCanvas();
+					if (z) {
+						console.log('got imagedata from canvas', z.data);
 
-			const onPaste = (event) => {
-				const items = event.clipboardData?.items;
-				if (!items) { return; }
-				for (let i = 0; i < items.length; i++) {
-					const item = items[i];
-
-					if (item.type.indexOf("image") !== -1) {
-						const blob = item.getAsFile();
-						const reader = new FileReader();
-
-						reader.addEventListener("load", function () {
-							console.log('reader.result is', reader.result);
-							const img = document.querySelector('.canvas-area img');
-							img.src = reader.result;
-							setTimeout(() => {
-								const z = getImageDataFromEmojiWithCanvas();
-								if (z) {
-									console.log('got imagedata from canvas', z.data);
-									let a = [];
-									let b = [];
-									let c = [];
-									let d = [];
-									for (let j = 0; j < 64; j++) {
-										for (let i = 0; i < 64; i++) {
-											const index = (j * 64 + i) * 4;
-											if (i < 32 && j < 32) {
-												a.push(z.data[index]);
-												a.push(z.data[index + 1]);
-												a.push(z.data[index + 2]);
-												a.push(z.data[index + 3]);
-											}
-											if (i >= 32 && j < 32) {
-												b.push(z.data[index]);
-												b.push(z.data[index + 1]);
-												b.push(z.data[index + 2]);
-												b.push(z.data[index + 3]);
-											}
-											if (i < 32 && j >= 32) {
-												c.push(z.data[index]);
-												c.push(z.data[index + 1]);
-												c.push(z.data[index + 2]);
-												c.push(z.data[index + 3]);
-											}
-											if (i >= 32 && j >= 32) {
-												d.push(z.data[index]);
-												d.push(z.data[index + 1]);
-												d.push(z.data[index + 2]);
-												d.push(z.data[index + 3]);
-											}
-										}
-									}
-									console.log('data to send to unicorns', a, b, c, d);
-
-									sendPixelsToUnicorn(0, new Uint8Array(a));
-									sendPixelsToUnicorn(1, new Uint8Array(b));
-									sendPixelsToUnicorn(2, new Uint8Array(c));
-									sendPixelsToUnicorn(3, new Uint8Array(d));
-								}
-							}, 0);
-						});
-						console.log('blob', blob);
-						if (blob) {
-							const slicedBlob = blob.slice(0, blob.size, blob.type);
-							console.log('slicedBlob', slicedBlob);
-							reader.readAsDataURL(slicedBlob);
+						if (howManyUnicorns === 1) {
+							sendPixelsToUnicorn(0, new Uint8Array(z.data));
+						} else if (howManyUnicorns === 4) {
+							sendPixelsToFourUnicorns(z.data);
 						}
+						
 					}
+				}, 0);
+			});
+			console.log('blob', blob);
+			if (blob) {
+				const slicedBlob = blob.slice(0, blob.size, blob.type);
+				console.log('slicedBlob', slicedBlob);
+				reader.readAsDataURL(slicedBlob);
+			}
+		}
+	}
+};
+
+const writePixelsToCanvas = (index, dataRgbaArray) => {
+	var c = document.getElementById(`canvas-${index}`);
+	var ctx = c?.getContext("2d");
+	if (ctx) {
+		console.log('writePixelsToCanvas', index, dataRgbaArray);
+		//ctx.scale(2, 2);
+		if (dataRgbaArray) {
+			for (var y = 0; y < 32; y++) {
+				for (var x = 0; x < 32; x++) {
+					const index = (y * 32 + x) * 4;
+					// get rgba data
+					const r = dataRgbaArray[index];
+					const g = dataRgbaArray[index + 1];
+					const b = dataRgbaArray[index + 2];
+					const a = dataRgbaArray[index + 3];
+
+					// convert rgba to rgb
+					const aa = a / 255;
+					const rr = Math.round(r * aa);
+					const gg = Math.round(g * aa);
+					const bb = Math.round(b * aa);
+
+					// Draw rgb to canvas
+					ctx.fillStyle = `rgb(${rr}, ${gg}, ${bb})`;
+					ctx.fillRect(x, y, 1, 1);
 				}
-			};
+			}
+			//ctx.scale(2, 2);
+		} else {
+			// no data, draw black
+			ctx.fillStyle = `rgb(0, 0, 0)`;
+			ctx.fillRect(0, 0, 32, 32);
+		}
 
-			document.addEventListener("paste", onPaste);
+	}
+};
 
-			const writePixelsToCanvas = (index, dataRgbaArray) => {
-				var c = document.getElementById(`canvas-${index}`);
-				var ctx = c?.getContext("2d");
-				if (ctx) {
-					console.log('writePixelsToCanvas', index, dataRgbaArray);
-					//ctx.scale(2, 2);
-					if (dataRgbaArray) {
-						for (var y = 0; y < 32; y++) {
-							for (var x = 0; x < 32; x++) {
-								const index = (y * 32 + x) * 4;
-								// get rgba data
-								const r = dataRgbaArray[index];
-								const g = dataRgbaArray[index + 1];
-								const b = dataRgbaArray[index + 2];
-								const a = dataRgbaArray[index + 3];
+const readPixelsFromCosmic = (index) => {
+	const ip = unicornConfigs[index].ip;
+	const url = `http://${ip}/get_pixels`;
+	const requestOptions = {
+		method: 'GET',
+	};
+	console.log(`readPixelsFromCosmic(${index})`, url);
+	fetch(url, requestOptions)
+		.then(response => {
+			//console.log('got response', response.body.length);
+			return response.arrayBuffer();
+		})
+		.then(data => {
+			const arrayFromBuffer = new Uint8Array(data);
+			// Convert Uint8Array into number[]
+			const numberArray = [];
+			for (var i = 0; i < arrayFromBuffer.length - 1; i++) {
+				numberArray.push(arrayFromBuffer[i]);
+			}
 
-								// convert rgba to rgb
-								const aa = a / 255;
-								const rr = Math.round(r * aa);
-								const gg = Math.round(g * aa);
-								const bb = Math.round(b * aa);
+			unicornConfigs[index].dataRgbaArray = numberArray;
 
-								// Draw rgb to canvas
-								ctx.fillStyle = `rgb(${rr}, ${gg}, ${bb})`;
-								ctx.fillRect(x, y, 1, 1);
-							}
-						}
-						//ctx.scale(2, 2);
-					} else {
-						// no data, draw black
-						ctx.fillStyle = `rgb(0, 0, 0)`;
-						ctx.fillRect(0, 0, 32, 32);
-					}
+			writePixelsToCanvas(index, numberArray);
 
-				}
-			};
+		}).catch((err) => {
+			console.log('ERROR: get_pixels catch');
+			unicornConfigs[index].dataRgbaArray = undefined;
+		});
+};
 
-			const readPixelsFromCosmic = (index) => {
-				const ip = unicornConfigs[index].ip;
-				const url = `http://${ip}/get_pixels`;
-				const requestOptions = {
-					method: 'GET',
-				};
-				console.log(`readPixelsFromCosmic(${index})`, url);
-				fetch(url, requestOptions)
-					.then(response => {
-						//console.log('got response', response.body.length);
-						return response.arrayBuffer();
-					})
-					.then(data => {
-						const arrayFromBuffer = new Uint8Array(data);
-						// Convert Uint8Array into number[]
-						const numberArray = [];
-						for (var i = 0; i < arrayFromBuffer.length - 1; i++) {
-							numberArray.push(arrayFromBuffer[i]);
-						}
+const drawCosmicHTML = () => {
+	const config = unicornConfigs;
+	console.log('will draw ' + howManyUnicorns);
+	const ca = document.querySelector('#cosmic-area');
+	ca.innerHTML = '';
+	for (let i = 0; i < howManyUnicorns; i++) {
 
-						unicornConfigs[index].dataRgbaArray = numberArray;
+		if (i == 2) {
+			ca.append(document.createElement('br'));
+		}
 
-						writePixelsToCanvas(index, numberArray);
+		let d = document.createElement('div');
+		d.id = `cosmic-${i}`;
+		d.className = 'cosmic-square';
+		d.innerHTML = `
+<canvas
+	id="canvas-${i}"
+	height="64"
+	width="64"
+></canvas>
+<div class="cosmic-info">
+	${i} ${config[i].name} ${config[i].ip}
+</div>
+`;
+		ca.append(d);
 
-					}).catch((err) => {
-						console.log('ERROR: get_pixels catch');
-						unicornConfigs[index].dataRgbaArray = undefined;
-					});
-			};
+		scaleUpCanvas(i);
 
-			const drawCosmicHTML = () => {
-				const config = unicornConfigs;
-				console.log('will draw ' + config.length);
-				const ca = document.querySelector('#cosmic-area');
-				ca.innerHTML = '';
-				for (let i = 0; i < config.length; i++) {
+		readPixelsFromCosmic(i);
+	}
+};
 
-					if (i == 2) {
-						ca.append(document.createElement('br'));
-					}
+const fetchConfig = () => {
 
-					let d = document.createElement('div');
-					d.id = `cosmic-${i}`;
-					d.className = 'cosmic-square';
-					d.innerHTML = `
-      <canvas
-        id="canvas-${i}"
-        height="64"
-        width="64"
-      ></canvas>
-      <div>
-        ${i} ${config[i].name} ${config[i].ip}
-      </div>
-      `;
-					ca.append(d);
-				}
-			};
+	const data = new Promise((resolve, reject) => {
+		fetch('./config-unicorns.json')
+			.then(respond => {
+				resolve(respond.json());
+			}).catch(err => {
+				reject(err);
+			});
+	});
 
-			const fetchConfig = () => {
+	data.then(json => {
+		console.log(json);
+		unicornConfigs = json;
 
-				const data = new Promise((resolve, reject) => {
-					fetch('./config-unicorns.json')
-						.then(respond => {
-							resolve(respond.json());
-						}).catch(err => {
-							reject(err);
-						});
-				});
+		drawCosmicHTML();
 
-				data.then(json => {
-					console.log(json);
-					unicornConfigs = json;
+	}).catch(err => {
+		console.log('err', err);
+	});
+};
 
-					drawCosmicHTML();
+const scaleUpCanvas = (index) => {
+	const c = document.getElementById(`canvas-${index}`);
+	const ctx = c?.getContext("2d");
+	if (ctx) {
+		ctx.scale(2, 2);
+	}
+};
 
-					readPixelsFromCosmic(0);
-					readPixelsFromCosmic(1);
-					readPixelsFromCosmic(2);
-					readPixelsFromCosmic(3);
+const userPressed1 = () => {
+	howManyUnicorns = 1;
+	pixelWidth = 32;
+	const c = document.getElementById(`canv`);
+	if (c) {
+		c.setAttribute('width', pixelWidth);
+		c.setAttribute('height', pixelWidth);
+	}
+	drawCosmicHTML();
+};
 
-				}).catch(err => {
-					console.log('err', err);
-				});
-			};
+const userPressed4 = () => {
+	howManyUnicorns = 4;
+	pixelWidth = 64;
+	const c = document.getElementById(`canv`);
+	if (c) {
+		c.setAttribute('width', pixelWidth);
+		c.setAttribute('height', pixelWidth);
+	}
+	drawCosmicHTML();
+};
 
-			const scaleUp = (index) => {
-				var c = document.getElementById(`canvas-${index}`);
-				var ctx = c?.getContext("2d");
-				if (ctx) {
-					ctx.scale(2, 2);
-				}
-			};
+const setupEvents = () => {
+	// Button click events
+	const b1 = document.getElementById(`btn-1`);
+	b1?.addEventListener('click', userPressed1);
+	const b4 = document.getElementById(`btn-4`);
+	b4?.addEventListener('click', userPressed4);
 
-			setInterval(() => {
-				readPixelsFromCosmic(0);
-				readPixelsFromCosmic(1);
-				readPixelsFromCosmic(2);
-				readPixelsFromCosmic(3);
-			}, 15 * 1000);
+	// Paste event
+	document.addEventListener("paste", onPaste);
+};
 
-			setTimeout(() => {
-				scaleUp(0);
-				scaleUp(1);
-				scaleUp(2);
-				scaleUp(3);
-			}, 100);
+// Every 15s read pixel info from the unicorn
+setInterval(() => {
+	if (howManyUnicorns === 1) {
+		readPixelsFromCosmic(0);
+	} else if (howManyUnicorns === 4) {
+		readPixelsFromCosmic(0);
+		readPixelsFromCosmic(1);
+		readPixelsFromCosmic(2);
+		readPixelsFromCosmic(3);
+	}
+}, 15 * 1000);
 
-			fetchConfig();
+// Program start
+// Fetch config file
+fetchConfig();
+// Setup DOM events
+setupEvents();
 
 		})();
 	</script>
