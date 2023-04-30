@@ -22,7 +22,7 @@ A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on the
 
 Paste from clipboard to the Cosmic Unicorn
 
-This weekend hack project currently only supports pasting to 4 cosmic unicorns. I will update the project to support pasting both to 1 or 4 cosmic unicorn soon..
+This weekend hack project currently only supports pasting to 4 cosmic unicorns. I will update the project to support pasting to both to 1 or 4 cosmic unicorn soon..
 
 - Written in HTML and Vanilla JavaScript
 
