@@ -23,15 +23,15 @@ COUNTRY="GB or US or your country"
 
 ## Installing the server code without user interface
 
-- From the repo, upload `emoji_paint.py` on your Pico.
+- From the repo, upload `cosmic-paste.py` on your Pico.
 - In Thonny, run the file on the Pico, and get the IP address from the console
 - If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
-- Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
+- Optionally copy `cosmic-paste.py` to `main.py` if you want it to start on boot
 
 - Copy `cosmic-paste/config-unicorns.example.json` to `cosmic-paste/config-unicorns.json`
 - Edit the file `cosmic-paste/config-unicorns.json` with your Unicorn IP address.
-- Upload `cosmic-paste/config-unicorns.json` to your Pico.
-- Upload `paint.html` on your Pico
+- Upload `cosmic-paste/config-unicorns.json` to your Pico in a `cosmic-paste/` folder.
+- Upload `cosmic-paste/paint.html` on your Pico in a `cosmic-paste/` folder.
 
 Load the user interface at `http://<your-pico-ip>/paint.html`
 

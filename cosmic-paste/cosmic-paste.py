@@ -22,7 +22,7 @@ server = Microdot()
 
 @server.route("/", methods=["GET"])
 def route_index(request):
-    return send_file("emoji_paint/index.html")
+    return send_file("cosmic-paste/paste.html")
 
 @server.route("/config-unicorns.json", methods=["GET"])
 def route_index(request):
