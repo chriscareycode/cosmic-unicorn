@@ -36,17 +36,11 @@
   .canvas-area canvas {
     height: 64px;
     width: 64px;
-    /* position: absolute;
-    top: 0;
-    left: 0; */
     border: 1px solid #222;
   }
   .canvas-area img {
     height: 64px;
     width: 64px;
-    /* position: absolute;
-    top: 0;
-    left: 0; */
     border: 1px solid #222;
   }
 </style>
@@ -257,8 +251,6 @@
 		}
   };
 
-  
-
   const readPixelsFromCosmic = (index) => {
     const ip = unicornConfigs[index].ip;
     const url = `http://${ip}/get_pixels`;
@@ -315,8 +307,6 @@
 				// });
 			});
   };
-
-  
 
   const drawCosmicHTML = () => {
     const config = unicornConfigs;

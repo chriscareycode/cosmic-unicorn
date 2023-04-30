@@ -2,6 +2,8 @@
 
 A vanilla JavaScript/HTML page to paste from the clipboard to the Cosmic Unicorn
 
+![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-paste-1.jpeg "Cosmic Paste")
+
 ## Install required libraries
 
 Connect your Pico to the computer and run Thonny. Select your Pico by clicking on the bottom right corner in Thonny. You should see the list of files on the Pico in the bottom left section. Stop any running process by clicking the Stop icon.
@@ -31,7 +33,7 @@ COUNTRY="GB or US or your country"
 - Upload `cosmic-paste/config-unicorns.json` to your Pico.
 - Upload `paint.html` on your Pico
 
-Load the user interface at http://<your-pico-ip>/paint.html
+Load the user interface at `http://<your-pico-ip>/paint.html`
 
 ## Local Development
 
@@ -41,6 +43,6 @@ or
 
 - `python -m http.server 3070`
 
-Open http://localhost:3070/paste.html in the browser
+Open `http://localhost:3070/paste.html` in the browser
 
 [Back to top](https://github.com/chriscareycode/cosmic-unicorn/)
