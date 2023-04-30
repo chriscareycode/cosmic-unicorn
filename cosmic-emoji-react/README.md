@@ -32,9 +32,9 @@ A note that if you are installing this on multiple Cosmic Unicorns, that you can
 ## Installing the server code without user interface
 
 - From the repo, install `emoji_paint.py` on your Pico.
+    - Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
 - In Thonny, run the file on the Pico, and get the IP address from the console
-- If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
-- Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
+    - If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
 
 If you go this route, then you will need to run the user interface on your computer or somewhere else. You will need the IP address above for configuration in the user interface.
 
