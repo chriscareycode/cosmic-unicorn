@@ -3,11 +3,15 @@
 A collection of projects for the Pimoroni Cosmic Unicorn
 https://shop.pimoroni.com/products/cosmic-unicorn
 
-These are really difficult to capture on the phone camera. In person, they are much more vibrant than the photos.
+These Cosmic Unicorn photos are really difficult to capture on the phone camera. In person, they are much more bright and vibrant in color.
 
 #
 
 ## [cosmic-emoji-react](cosmic-emoji-react/)
+
+❤️ 🔥 🥰 🚀 😡 👾 🐢 ⚡️ 💸
+
+There is something very nice about having super sized emojis on display around your home or office.
 
 A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet.
 - Written in TypeScript, React
