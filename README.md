@@ -24,7 +24,10 @@ A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on the
 
 ## [cosmic paste](cosmic-paste/)
 
-Paste from clipboard to the Cosmic Unicorn
+A vanilla JavaScript/HTML page to paste from the clipboard to the Cosmic Unicorn
+
+Paste from clipboard to the Cosmic Unicorn (32x32 1024 pixels)
+Paste from clipboard to 4 Cosmic Unicorns (64x64 4096 pixels)
 
 - Written in HTML and Vanilla JavaScript
 

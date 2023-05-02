@@ -2,6 +2,9 @@
 
 A vanilla JavaScript/HTML page to paste from the clipboard to the Cosmic Unicorn
 
+Paste from clipboard to the Cosmic Unicorn (32x32 1024 pixels)
+Paste from clipboard to 4 Cosmic Unicorns (64x64 4096 pixels)
+
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-paste-1.jpeg "Cosmic Paste")
 
 ## Install required libraries
