@@ -44,7 +44,7 @@ If you want to install both the server code and user interface on the Pico, read
 
 Here are the instructions for running the server code and user interface on the Pico, using the latest pre-built release:
 
--  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-unicorn/releases](https://github.com/chriscareycode/cosmic-unicorn/releases) . You only need the cosmic-paint-react-v0.0.2.zip file, not the source code files.
+-  Download the latest from the GitHub releases. [https://github.com/chriscareycode/cosmic-unicorn/releases](https://github.com/chriscareycode/cosmic-unicorn/releases) . You only need the cosmic-emoji-react-v0.0.3.zip file, not the source code files.
 
 - Extract the file.
 
