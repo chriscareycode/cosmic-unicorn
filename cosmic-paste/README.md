@@ -2,8 +2,6 @@
 
 A vanilla JavaScript/HTML page to paste from the clipboard to the Cosmic Unicorn
 
-This weekend hack project currently only supports pasting to 4 cosmic unicorns. I will update the project to support pasting to both 1 or 4 cosmic unicorn soon..
-
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-paste-1.jpeg "Cosmic Paste")
 
 ## Install required libraries
