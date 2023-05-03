@@ -15,7 +15,7 @@ In Thonny, go to Tools -> Manage Packages...
 
 Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
 
-## Setup WIFI_CONFIG.py
+## Setup WIFI_CONFIG.py and copy network_manager.py
 
 This script uses and requires the same `WIFI_CONFIG.py` that many of the other WiFi examples use (like cosmic_paint). That will need to be setup like this:
 ```
@@ -23,6 +23,10 @@ SSID="fill this in with network name"
 PSK="fill this in with password"
 COUNTRY="GB or US or your country"
 ```
+You will also need to upload `network_manager.py` from the common folder
+- [micropython/examples/common](https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/examples/common)
+
+https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/examples/cosmic_unicorn#wireless-examples
 
 ## Installing the code on your Cosmic Unicorn Pico
 
