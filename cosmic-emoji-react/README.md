@@ -6,7 +6,7 @@ There is something very nice about having super sized emojis on display around y
 
 A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet. https://shop.pimoroni.com/products/cosmic-unicorn
 
-![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-1.jpeg "Cosmic Emojis")
+![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-2.jpeg "Cosmic Emojis")
 
 <img src="https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg" alt="Mobile" width="200"/>
 

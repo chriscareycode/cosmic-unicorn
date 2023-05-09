@@ -18,7 +18,7 @@ A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on the
 
 [cosmic-emoji-react](cosmic-emoji-react/)
 
-![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-1.jpeg "Cosmic Emojis")
+![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-2.jpeg "Cosmic Emojis")
 
 #
 
