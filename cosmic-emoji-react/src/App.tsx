@@ -32,9 +32,9 @@ function App() {
 	const [isIdle, setIsIdle] = useState(false);
 	const [fetchState, setFetchState] = useState<FetchStateType>({});
 	const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
-  const [unifiedCode, setUnifiedCode] = useState('1f423');
-  const [imageLoadedAt, setImageLoadedAt] = useState(0);
-  const [emojiStyle, setEmojiStyle] = useQueryParamState('style', 'string', EmojiStyle.APPLE);
+	const [unifiedCode, setUnifiedCode] = useState('1f423');
+	const [imageLoadedAt, setImageLoadedAt] = useState(0);
+	const [emojiStyle, setEmojiStyle] = useQueryParamState('style', 'string', EmojiStyle.APPLE);
 
 	/**
 	 * Load config file
@@ -86,13 +86,10 @@ function App() {
 	});
 	/* eslint-enable  @typescript-eslint/no-unused-vars */
 
+	/**
+	 * useEffect hook to attach the paste event catcher
+	 */
 	useEffect(() => {
-		// document.onpaste = (evt) => {
-		// 	console.log('onpaste');
-		// 	const dT = evt.clipboardData; // || window.clipboardData;
-		// 	const file = dT?.files[ 0 ];
-		// 	console.log( file );
-		// };
 
 		const onPaste = (event: any) => {
 			const items = event.clipboardData?.items;
@@ -122,7 +119,6 @@ function App() {
 						console.log('slicedBlob', slicedBlob);
 						reader.readAsDataURL(slicedBlob);
 					}
-					//reader.readAsDataURL(blob);
 				}
 			}
 		};
@@ -409,18 +405,20 @@ function App() {
 				/>
 			</div>
 
+			{/**
+			 * This area is used internally by the program to perform the emoji magic.
+			 * First we write the picture to an <img> tag,
+			 * (here we are using the <Emoji> component that will render us an img tag)
+			 * Then we copy that image onto canvas to get the byte array
+			 */}
 			<div className="canvas-area">
-				{/* Though we only want a 32x32 emoji, I'm setting this canvas to 40x40 */}
-				{/* Different devices write the emoji to canvas off by a couple pixels */}
-				{/* That we fix with scoochX and scoochY values above */}
-				Canvas: <canvas id="canv" width="32" height="32"></canvas>
-        
-				<Emoji
+				IMG: <Emoji
 					emojiStyle={emojiStyle}
 					unified={unifiedCode} //"1f423"
 					size={32}
 					lazyLoad={false}
 				/>
+				Canvas: <canvas id="canv" width="32" height="32"></canvas>
 			</div>
 
 			{/* Settings area that we might use later */}
