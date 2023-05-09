@@ -8,6 +8,8 @@ A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on the
 
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-2.jpeg "Cosmic Emojis")
 
+Interface on mobile:
+
 <img src="https://chriscarey.com/images/pimoroni/unicorn/mobile.jpg" alt="Mobile" width="200"/>
 
 #
