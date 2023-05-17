@@ -1,3 +1,11 @@
+#
+# cosmic paste
+#
+# - FEATURE fix brigtness to change on the fly
+# - HOUSEKEEPING rename emoji_paint.py to cosmic-paste.py (and build folders, and releases)
+# - HOUSEKEEPING readme remove requirement network_manager.py, its not needed
+# - OPTIMIZE do not send rgba to pico, send rgb only (do rgba->rgb in the browser)
+#
 import os
 from microdot_asyncio import Microdot, Request, Response, send_file
 from phew import connect_to_wifi
@@ -22,15 +30,15 @@ server = Microdot()
 
 @server.route("/", methods=["GET"])
 def route_index(request):
-    return send_file("cosmic-paste/paste.html")
+    return send_file("cosmic-paste/cosmic-paste.html")
 
 @server.route("/config-unicorns.json", methods=["GET"])
 def route_index(request):
-    return send_file("emoji_paint/config-unicorns.json")
+    return send_file("cosmic-paste/config-unicorns.json")
 
-@server.route("/static/<path:path>", methods=["GET"])
-def route_static(request, path):
-    return send_file(f"emoji_paint/static/{path}")
+# @server.route("/static/<path:path>", methods=["GET"])
+# def route_static(request, path):
+#     return send_file(f"cosmic-paste/static/{path}")
 
 @server.route('/get_pixels', methods=["GET"])
 def route_get_pixels(req):
@@ -41,7 +49,6 @@ def route_get_pixels(req):
     res.headers["Access-Control-Allow-Origin"] = '*'
     res.body = last_pixels
     return res
-    
 
 @server.post('/set_pixels')
 def set_pixels(req):

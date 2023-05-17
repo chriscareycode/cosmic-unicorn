@@ -1,3 +1,12 @@
+#
+# cosmic emoji
+#
+# - FEATURE fix brigtness to change on the fly
+# - HOUSEKEEPING rename emoji_paint.py to cosmic-emoji.py (and build folders, and releases)
+# - HOUSEKEEPING readme remove requirement network_manager.py, its not needed
+# - OPTIMIZE do not send rgba to pico, send rgb only (do rgba->rgb in the browser)
+#
+#
 import os
 from microdot_asyncio import Microdot, Request, Response, send_file
 from phew import connect_to_wifi
@@ -25,15 +34,15 @@ print(f"Start painting at: http://{ip}")
 
 @server.route("/", methods=["GET"])
 def route_index(request):
-    return send_file("emoji_paint/index.html")
+    return send_file("cosmic-emoji/index.html")
 
 @server.route("/config-unicorns.json", methods=["GET"])
 def route_index(request):
-    return send_file("emoji_paint/config-unicorns.json")
+    return send_file("cosmic-emoji/config-unicorns.json")
 
 @server.route("/static/<path:path>", methods=["GET"])
 def route_static(request, path):
-    return send_file(f"emoji_paint/static/{path}")
+    return send_file(f"cosmic-emoji/static/{path}")
 
 @server.route('/get_pixels', methods=["GET"])
 def route_get_pixels(req):

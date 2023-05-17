@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "BROWSER=none PORT=3069 craco start",
-    "build": "BUILD_PATH='./pico/emoji_paint' craco build",
+    "build": "BUILD_PATH='./pico/cosmic-emoji' craco build",
     "test": "creaco test",
     "eject": "react-scripts eject"
   },

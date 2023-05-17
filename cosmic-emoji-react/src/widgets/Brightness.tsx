@@ -72,7 +72,7 @@ const Brightness = ({
 		const tmp_brightness = parseFloat(e.target.value);
 		setBrightness(tmp_brightness); // save to state
 		saveBrightness(tmp_brightness); // save to pico
-	}, 1000);
+	}, 50);
 
 	useEffect(() => {
 		getBrightness();

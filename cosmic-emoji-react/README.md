@@ -6,6 +6,8 @@ There is something very nice about having super sized emojis on display around y
 
 A project for the Pimoroni Cosmic Unicorn that allows you to paint emojis on them, and control them from a computer, phone, or tablet. https://shop.pimoroni.com/products/cosmic-unicorn
 
+* Also supports pasting any image from your clipboard to the Cosmic Unicorn
+
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-emoji-2.jpeg "Cosmic Emojis")
 
 Interface on mobile:
@@ -38,12 +40,12 @@ https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/examples/cosmic_
 
 ## Installing on multiple Cosmic Unicorns
 
-A note that if you are installing this on multiple Cosmic Unicorns, that you can install the user interface code (which is quite large) on only one device. On the other devices you only need to install the server code `emoji_paint.py`
+A note that if you are installing this on multiple Cosmic Unicorns, that you can install the user interface code (which is quite large) on only one device. On the other devices you only need to install the server code `cosmic-emoji.py`
 
 ## Installing the server code without user interface
 
-- From the repo, install `emoji_paint.py` on your Pico.
-    - Optionally copy `emoji_paint.py` to `main.py` if you want it to start on boot
+- From the repo, install `cosmic-emoji.py` on your Pico.
+    - Optionally copy `cosmic-emoji.py` to `main.py` if you want it to start on boot
 - In Thonny, run the file on the Pico, and get the IP address from the console
     - If it does not run, or you do not see the IP address, then setup `WIFI_CONFIG.py` or install required libraries and try again.
 
@@ -59,9 +61,9 @@ Here are the instructions for running the server code and user interface on the 
 
 - Extract the file.
 
-- Copy `emoji_paint/config-unicorns.example.json` to `emoji_paint/config-unicorns.json`
+- Copy `cosmic-emoji/config-unicorns.example.json` to `cosmic-emoji/config-unicorns.json`
 
-- Edit the file `emoji_paint/config-unicorns.json` with your Unicorn IP address.
+- Edit the file `cosmic-emoji/config-unicorns.json` with your Unicorn IP address.
 
 - If you have multiple Cosmic Unicorns, you can add multiple entries to control them all. Make sure to add commas in the right spots so the file is valid JSON format. You may want to install the user interface only on one of the Picos, and install server files only on the others. It's up to you.
 
@@ -69,23 +71,23 @@ Here are the instructions for running the server code and user interface on the 
 
 If you know the IP address that your pico has, then edit that IP address in the `config-unicorns.json` file.
 
-If you do not know the IP address, then upload `emoji_paint.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
+If you do not know the IP address, then upload `cosmic-emoji.py` and run that. In the Thonny console it will tell your the IP address if WiFi connection is successful. Edit the `config-unicorns.json` with the IP address of your pico and save the config file.
 
 ### Upload the files (with user interface)
 
 Upload the rest of the files to the pico using Thonny or another tool. 
 
 Copy the files to your pico:
-- emoji_paint.py
-- emoji_paint/index.html
-- emoji_paint/config-unicorns.json
-- emoji_paint/static/ (folder with css and js files)
+- cosmic-emoji.py
+- cosmic-emoji/index.html
+- cosmic-emoji/config-unicorns.json
+- cosmic-emoji/static/ (folder with css and js files)
 
-`emoji_paint.py` is the server and goes in the root of your pico, and the `emoji_paint/` folder contains the user interface.
+`cosmic-emoji.py` is the server and goes in the root of your pico, and the `cosmic-emoji/` folder contains the user interface.
 
 ### Optionally make this script run when the Pico boots up
 
-If you want this script to run on boot, then you need to copy the contents of `emoji_paint.py` into `main.py`. main.py is the file that starts on boot.
+If you want this script to run on boot, then you need to copy the contents of `cosmic-emoji.py` into `main.py`. main.py is the file that starts on boot.
 
 
 

@@ -1,10 +1,10 @@
-rm pico/emoji_paint/asset-manifest.json
-rm pico/emoji_paint/favicon.ico
-rm pico/emoji_paint/logo*.png
-rm pico/emoji_paint/manifest.json
-rm pico/emoji_paint/robots.txt
-rm pico/emoji_paint/config-unicorns.json
+rm pico/cosmic-emoji/asset-manifest.json
+rm pico/cosmic-emoji/favicon.ico
+rm pico/cosmic-emoji/logo*.png
+rm pico/cosmic-emoji/manifest.json
+rm pico/cosmic-emoji/robots.txt
+rm pico/cosmic-emoji/config-unicorns.json
 
-rm pico/emoji_paint/static/css/*.map
-rm pico/emoji_paint/static/js/*.map
-rm pico/emoji_paint/static/js/*.txt
+rm pico/cosmic-emoji/static/css/*.map
+rm pico/cosmic-emoji/static/js/*.map
+rm pico/cosmic-emoji/static/js/*.txt
