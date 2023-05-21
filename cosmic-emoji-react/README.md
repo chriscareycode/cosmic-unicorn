@@ -22,7 +22,7 @@ Connect your Pico to the computer and run Thonny. Select your Pico by clicking o
 
 In Thonny, go to Tools -> Manage Packages...
 
-Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint).
+Search for `microdot_asyncio` and install that. This will copy some files into the lib/ folder on your pico. It is needed for the web server that we use (same as cosmic_paint). Also search for and install `micropython-phew`.
 
 ## Setup WIFI_CONFIG.py and copy network_manager.py
 
