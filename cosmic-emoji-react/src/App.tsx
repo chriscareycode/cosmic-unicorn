@@ -33,7 +33,7 @@ function App() {
 	const [fetchState, setFetchState] = useState<FetchStateType>({});
 	const [unicornConfigs, setUnicornConfigs] = useState<UnicornType[]>([]);
 	const [unifiedCode, setUnifiedCode] = useState('1f423');
-	const [imageLoadedAt, setImageLoadedAt] = useState(0);
+	// const [imageLoadedAt, setImageLoadedAt] = useState(0);
 	const [emojiStyle, setEmojiStyle] = useQueryParamState('style', 'string', EmojiStyle.APPLE);
 
 	/**
@@ -62,7 +62,12 @@ function App() {
 				setIsConfigError(true);
 				setConfigErrorMessage(`ERROR: Was not able to load the config file ${configFile}. Make sure it exists. Copy example from ${configExampleFile}.`);
 			});
-	}, [setUnicornConfigs, setIsConfigError, setConfigErrorMessage]);
+	}, [
+		setUnicornConfigs,
+		setSelectedIndex,
+		setIsConfigError,
+		setConfigErrorMessage,
+	]);
 
 	/* Stop polling for image updates if the page is inactive */
 	const onIdle = () => {
@@ -85,49 +90,6 @@ function App() {
 		throttle: 500
 	});
 	/* eslint-enable  @typescript-eslint/no-unused-vars */
-
-	/**
-	 * useEffect hook to attach the paste event catcher
-	 */
-	useEffect(() => {
-
-		const onPaste = (event: any) => {
-			const items = event.clipboardData?.items;
-			if (!items) { return; }
-			for (let i = 0; i < items.length; i++) {
-				const item = items[i];
-		
-				if (item.type.indexOf("image") !== -1) {
-					const blob = item.getAsFile();
-					const reader = new FileReader();
-		
-					reader.addEventListener("load", function() {
-						console.log('reader.result is', reader.result);
-						//imagePreview.src = reader.result;
-						const img = document.querySelector('.canvas-area img') as any;
-						img.src = reader.result;
-						setTimeout(() => {
-							const d = getImageDataFromEmojiWithCanvas();
-							if (d) {
-								sendPixelsToUnicorn(d.data);
-							}
-						}, 0);
-					});
-					console.log('blob', blob);
-					if (blob) {
-						const slicedBlob = blob.slice(0, blob.size, blob.type);
-						console.log('slicedBlob', slicedBlob);
-						reader.readAsDataURL(slicedBlob);
-					}
-				}
-			}
-		};
-
-		document.addEventListener("paste", onPaste);
-		return () => {
-			document.removeEventListener("paste", onPaste);
-		};
-	}, [unicornConfigs, selectedIndex]);
 
 	const sendPixelsToUnicorn = useCallback(async (payload: any) => {
 		const config = unicornConfigs[selectedIndex];
@@ -192,7 +154,56 @@ function App() {
 		} else {
 			return null;
 		}
-	}, [sendPixelsToUnicorn]);
+	}, []);
+
+	/**
+	 * useEffect hook to attach the paste event catcher
+	 */
+	useEffect(() => {
+
+		const onPaste = (event: any) => {
+			const items = event.clipboardData?.items;
+			if (!items) { return; }
+			for (let i = 0; i < items.length; i++) {
+				const item = items[i];
+		
+				if (item.type.indexOf("image") !== -1) {
+					const blob = item.getAsFile();
+					const reader = new FileReader();
+		
+					reader.addEventListener("load", function() {
+						console.log('reader.result is', reader.result);
+						//imagePreview.src = reader.result;
+						const img = document.querySelector('.canvas-area img') as any;
+						img.src = reader.result;
+						setTimeout(() => {
+							const d = getImageDataFromEmojiWithCanvas();
+							if (d) {
+								sendPixelsToUnicorn(d.data);
+							}
+						}, 0);
+					});
+					console.log('blob', blob);
+					if (blob) {
+						const slicedBlob = blob.slice(0, blob.size, blob.type);
+						console.log('slicedBlob', slicedBlob);
+						reader.readAsDataURL(slicedBlob);
+					}
+				}
+			}
+		};
+
+		document.addEventListener("paste", onPaste);
+		return () => {
+			document.removeEventListener("paste", onPaste);
+		};
+	}, [
+		unicornConfigs,
+		selectedIndex,
+		getImageDataFromEmojiWithCanvas,
+		sendPixelsToUnicorn,
+	]);
+
 
 	useEffect(() => {
 		setTimeout(() => {

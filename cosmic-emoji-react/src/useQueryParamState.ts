@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface useQueryParamStateProps<T> {
 	defaultState: T;
@@ -26,14 +26,14 @@ export function useQueryParamState<T>(
 	const [myState, setMyState] = useState(initialState);
 	//document.location.search = `${name}=${myState}`;
 
-	const setToState = (newValue: T) => {
+	const setToState = useCallback((newValue: T) => {
 		if (typeof newValue === 'string' || typeof newValue === 'number' || typeof newValue === 'boolean') {
 			const searchParams = new URLSearchParams(window.location.search);
 			searchParams.set(name, newValue.toString());
 			window.history.replaceState(null, '', '?' + searchParams.toString());
 			setMyState(newValue);
 		}
-	};
+	}, [setMyState]);
 
 	return [myState, setToState];
 };
