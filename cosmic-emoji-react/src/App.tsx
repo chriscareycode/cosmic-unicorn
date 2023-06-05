@@ -370,6 +370,27 @@ function App() {
 		}
 	};
 
+	/**
+	 * Keypress handler to quickly select a Cosmic from multiple
+	 */
+	useEffect(() => {
+		function handleKeyPress(event: KeyboardEvent) {
+			console.log('Keyboard was pressed', event.key, typeof event.key);
+			const parsed = parseInt(event.key);
+			// console.log('Keyboard parsed to int', parsed);
+			if (!isNaN(parsed)) {
+				// console.log('unicornConfigs.length', unicornConfigs.length);
+				if (unicornConfigs.length >= parsed) {
+					setSelectedIndex(parsed - 1); // 0 based
+				}
+			}
+		}
+		window.addEventListener('keydown', handleKeyPress);
+		return () => {
+			window.removeEventListener('keydown', handleKeyPress);
+		};
+	  }, [unicornConfigs, setSelectedIndex]);
+
 	return (
 		<div className="App">
 
