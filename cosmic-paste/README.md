@@ -37,7 +37,7 @@ https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/examples/cosmic_
 - Copy `cosmic-paste/config-unicorns.example.json` to `cosmic-paste/config-unicorns.json`
 - Edit the file `cosmic-paste/config-unicorns.json` with your Unicorn IP address.
 - Upload `cosmic-paste/config-unicorns.json` to your Pico in a `cosmic-paste/` folder.
-- Upload `cosmic-paste/paint.html` on your Pico in a `cosmic-paste/` folder.
+- Upload `cosmic-paste/cosmic-paste.html` on your Pico in a `cosmic-paste/` folder.
 
 Load the user interface at `http://<your-pico-ip-address>/`
 
