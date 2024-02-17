@@ -1,6 +1,6 @@
 # doom-guy.py
 #
-# create a folder on your cosmic unicorn doom-guy/ and upload the doom-guy.jpg image inside there!
+# Upload doom-guy.jpg and doom-guy.py to your Pico with Thonny.
 # Then run doom-guy.py.
 #
 # Optionally copy doom-guy.py to main.py to run on startup
