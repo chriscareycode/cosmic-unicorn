@@ -12,6 +12,8 @@ Press the A, B, C, or D buttons to change Doom Guy's mood:
 The routine will rotate through images representing each mood every 10 seconds.
 This value can be configured at the top of the MicroPython file.
 
+This is using PicoGraphics to load a JPEG image as a sprite that actually contains 27 images, 32x32.
+
 This script is not particularly interesting on its own, but can be used as a foundation to build upon to make Doom Guy react to things. I am currently working on another variation of this script that will react to the status of my Nagios server where the more services are in WARNING or CRITICAL state, Doom Guy gets more angry.
 
 ![Doom Guy Image](screenshot/doom-guy-photo-400.jpg "Doom Guy")
