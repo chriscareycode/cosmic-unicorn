@@ -95,7 +95,7 @@ show_doom_guy(random.choice(bloody_images))
 time.sleep(0.5)
 show_doom_guy(random.choice(happy_images))
 
-print("program starting...")
+print("program starting... Push A, B, C or D to change his mood")
 
 
     
