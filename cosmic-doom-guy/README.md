@@ -18,9 +18,8 @@ This script is not particularly interesting on its own, but can be used as a fou
 
 ![Doom Guy Image](screenshot/doom-guy-photo-400.jpg "Doom Guy Image")
 
-<video width="320" height="240" controls>
-  <source src="https://chriscarey.com/video/pimoroni/doom-guy.mov" type="video/mp4">
-</video>
+<video src="https://chriscarey.com/video/pimoroni/doom-guy.mov" type="video/mp4" />
+
 
 As with all these unicorn photos, the colors are much more vibrant in-person. These photos do not do it justice.
 
