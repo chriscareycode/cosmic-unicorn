@@ -38,12 +38,12 @@ graphics.set_font("bitmap8")
 cu.set_brightness(0.6)
 
 
-print("trying to open doom-guy/doom-guy.jpg file.")
+print("trying to open doom-guy.jpg file.")
 
 jpeg = jpegdec.JPEG(graphics)
-jpeg.open_file("doom-guy/doom-guy.jpg")
+jpeg.open_file("doom-guy.jpg")
 
-print("opened doom-guy/doom-guy.jpg file.")
+print("opened doom-guy.jpg file.")
 
 
 

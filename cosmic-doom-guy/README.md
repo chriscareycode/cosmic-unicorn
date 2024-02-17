@@ -22,11 +22,10 @@ As with all these unicorn photos, the colors are much more vibrant in-person. Th
 
 ## Upload the files to your pico
 
-- Create the folder "doom-guy" to hold the image file
-- Upload doom-guy.jpg to the "doom-guy" folder.
+- Upload doom-guy.jpg to the root of your pico.
 - Upload doom.guy.py to the root of your pico.
 
-"doom-guy-photo-400.jpg" is not needed for this script to run. This file is a screenshot for the README.
+"screenshot" folder is not needed for this script to run.
 
 ## Run the file
 
