@@ -16,7 +16,11 @@ This is using PicoGraphics to load a JPEG image as a sprite that actually contai
 
 This script is not particularly interesting on its own, but can be used as a foundation to build upon to make Doom Guy react to things. I am currently working on another variation of this script that will react to the status of my Nagios server where the more services are in WARNING or CRITICAL state, Doom Guy gets more angry.
 
-![Doom Guy Image](screenshot/doom-guy-photo-400.jpg "Doom Guy")
+![Doom Guy Image](screenshot/doom-guy-photo-400.jpg "Doom Guy Image")
+
+<video width="320" height="240" controls>
+  <source src="https://chriscarey.com/video/pimoroni/doom-guy.mov" type="video/mp4">
+</video>
 
 As with all these unicorn photos, the colors are much more vibrant in-person. These photos do not do it justice.
 
