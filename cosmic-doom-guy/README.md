@@ -37,7 +37,7 @@ If you want this script to run on boot, then you need to copy the contents of `d
 
 #
 
-Also check out the doom-flynn-css project: https://github.com/chriscareycode/doom-flynn-css
+Check out my doom-flynn-css project to see what these images look like: https://github.com/chriscareycode/doom-flynn-css
 
 Thanks to Pimoroni for creating these awesome boards!
 
