@@ -20,19 +20,21 @@ This script is not particularly interesting on its own, but can be used as a fou
 
 ## Upload the files to your pico
 
-Create the folder "doom-guy" to hold the image file
-Upload doom-guy.jpg to the "doom-guy" folder.
-Upload doom.guy.py to the root of your pico.
+- Create the folder "doom-guy" to hold the image file
+- Upload doom-guy.jpg to the "doom-guy" folder.
+- Upload doom.guy.py to the root of your pico.
 
 ## Run the file
 
-Run doom-guy.py with Thonny
+- Run doom-guy.py with Thonny
 
 ## Optionally make this script run when the Pico boots up
 
 If you want this script to run on boot, then you need to copy the contents of `doom-guy.py` into `main.py`. main.py is the file that starts on boot.
 
 #
+
+Also check out the doom-flynn-css project: https://github.com/chriscareycode/doom-flynn-css
 
 Thanks to Pimoroni for creating these awesome boards!
 
