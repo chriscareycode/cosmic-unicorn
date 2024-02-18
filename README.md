@@ -35,4 +35,18 @@ Paste from clipboard to 4 Cosmic Unicorns (64x64 4096 pixels)
 
 ![Cosmic Emojis](https://chriscarey.com/images/pimoroni/unicorn/cosmic-paste-1.jpeg "Cosmic Paste")
 
+#
+
+## [cosmic doom guy](cosmic-doom-guy/)
+
+Doom Guy from the video game Doom, on your Cosmic Unicorn
+
+- Written in MicroPython
+
+[cosmic doom guy](cosmic-doom-guy/)
+
+![Doom Guy Image](cosmic-doom-guy/screenshot/doom-guy-photo-400.jpg "Doom Guy Image")
+
+
+
 
