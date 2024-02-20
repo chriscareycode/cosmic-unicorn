@@ -37,15 +37,15 @@ Paste from clipboard to 4 Cosmic Unicorns (64x64 4096 pixels)
 
 #
 
-## [cosmic doom guy](cosmic-doom-guy/)
+## [cosmic doomguy](cosmic-doomguy/)
 
 Doom Guy from the video game Doom, on your Cosmic Unicorn
 
 - Written in MicroPython
 
-[cosmic doom guy](cosmic-doom-guy/)
+[cosmic doomguy](cosmic-doomguy/)
 
-![Doom Guy Image](cosmic-doom-guy/screenshot/doom-guy-photo-400.jpg "Doom Guy Image")
+![Doomguy Image](cosmic-doomguy/screenshot/doomguy-photo-400.jpg "Doomguy Image")
 
 
 
