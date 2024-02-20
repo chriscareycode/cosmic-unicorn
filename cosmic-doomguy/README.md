@@ -1,9 +1,9 @@
-# cosmic-doom-guy
+# cosmic-doomguy
 
-Doom Guy, on your Pimoroni Cosmic Unicorn
+Doomguy, on your Pimoroni Cosmic Unicorn
 https://shop.pimoroni.com/products/cosmic-unicorn
 
-Press the A, B, C, or D buttons to change Doom Guy's mood:
+Press the A, B, C, or D buttons to change Doomguy's mood:
 - A: Happy
 - B: Upset
 - C: Angry
@@ -27,18 +27,18 @@ As with all these unicorn photos, the colors are much more vibrant in-person. Th
 
 ## Upload the files to your pico
 
-- Upload doom-guy.jpg to the root of your pico.
-- Upload doom.guy.py to the root of your pico.
+- Upload doomguy.jpg to the root of your pico.
+- Upload doomguy.py to the root of your pico.
 
 "screenshot" folder is not needed for this script to run.
 
 ## Run the file
 
-- Run doom-guy.py with Thonny
+- Run doomguy.py with Thonny
 
 ## Optionally make this script run when the Pico boots up
 
-If you want this script to run on boot, then you need to copy the contents of `doom-guy.py` into `main.py`. main.py is the file that starts on boot.
+If you want this script to run on boot, then you need to copy the contents of `doomguy.py` into `main.py`. main.py is the file that starts on boot.
 
 #
 
